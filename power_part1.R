@@ -28,7 +28,7 @@ options(digits=3)
 
 # We flip a coin N times, observe the average number of times it lands on 1,
 # and take measurements of this mean num.replications times.
-N <- 1e3
+N <- 1e4
 p <- 0.2
 num.replications <- 2000
 replications <- replicate(num.replications, mean(rbinom(N, 1, p)))
@@ -62,7 +62,7 @@ c(p.single.trial - 1.96*se, p.single.trial + 1.96*se) # norm approx 95% CI
 
 # This is equivalent to what comes out of a linear regression.
 d <- data.frame(y=rbinom(N, 1, p))
-summary(lm(y ~ 1, data=d))
+coeftest(lm(y ~ 1, data=d))
 
 
 #### Standard errors and N.
@@ -105,7 +105,7 @@ mean(treated.subjects$y) - mean(control.subjects$y)
 ## @sjt Doesn't seem to work, what am I doing wrong?
 t.test(treated.subjects, control.subjects)
 
-# or via linear regression
+# or via linear regression: should probably use HC errors
 m <- lm(y ~ D, data=my.experiment)
 summary(m)
 # take the SE for D, multiply by 1.96, e.g.,
@@ -157,17 +157,18 @@ run.trial(n=8, ate=5)
 # This function runs an experiment multiple times (num.replications),
 # and generates a dataframe containing estimates of the treatment effects and
 # standard errors for each experiment, sorted by the size of the effect.
-replicate.experiment <- function(n, ate, num.replications=100) {
+replicate.experiment <- function(sim.func, params, num.replications=100) {
   # Note: you can parallelize this process below by using %dopar% if
   # you have the 'doMC' package installed.
   exps <- foreach(replication=1:num.replications, .combine=rbind) %do% {
-  	as.data.frame(get.ci(run.trial(n, ate)))
+  	as.data.frame(get.ci(do.call(sim.func, params)))
   }
   exps <- exps[order(exps$est.ate),]
   exps <- mutate(exps,
     rank=1:nrow(exps),
     significant=sign(est.ate-1.96*est.se)==sign(est.ate+1.96*est.se)
   )
+  exps
 }
 
 #####
@@ -175,7 +176,8 @@ replicate.experiment <- function(n, ate, num.replications=100) {
 # there is no effect.
 
 # run 100 trials of an experiment with no ATE
-null.experiments <- replicate.experiment(n=1e3, ate=0.0, num.replications=100)
+null.experiments <- replicate.experiment(
+  run.trial, list(n=1e3, ate=0.0), num.replications=100)
 
 # plot the results of the experiments, rank-ordered by effect size, along
 # with their confidence intervals. Experiments that are "significant" have
@@ -195,7 +197,8 @@ mean(null.experiments$significant)
 ### Type II errors
 
 # this experiment has a true effect of +0.5 (out of an average, 10)
-sad.experiments <- replicate.experiment(n=250, ate=0.5, num.replications=100)
+sad.experiments <- replicate.experiment(run.trial, list(n=250, ate=0.5),
+  num.replications=100)
 
 # plot the results of the experiments, rank-ordered by effect size, along
 # with their confidence intervals. Experiments that are "significant" have
@@ -215,3 +218,42 @@ mean(sad.experiments$significant)
 # when experiments are underpowered, only reporting on significant experiments
 # can massively overstate effects.
 with(subset(sad.experiments, significant==TRUE), mean(est.ate))
+
+
+
+###################################
+##### Power analysis           ####
+###################################
+
+# In earlier slides we came up with a few expressions for the standard error
+# Let's consider that again.
+
+run.trial2 <- function(n, ate, prop.treated=0.5, y.sd=3) {
+  my.experiment <- data.frame(
+    y0=rnorm(n, mean=10, sd=y.sd))
+  mutate(my.experiment,
+    y1=y0 + ate,
+    D=rbinom(n, 1, prop.treated),
+    y=D*y1 + (1-D)*y0)
+}
+
+reps <- replicate.experiment(run.trial2,
+  list(n=1e3, ate=1, prop.treated=0.5, y.sd=3),
+  num.replications=5)
+reps
+
+
+hist(reps$est.ate)
+
+exps <- foreach(p=seq(0.01, 0.2, 0.1), .combine=rbind) %dopar% {
+  varying.prop = list(n=1e3, ate=1, prop.treated=p, y.sd=3)
+  replications <- replicate.experiment(
+    sim.func=run.trial2,
+    params=varying.prop,
+    num.replications=250)
+  data.frame(
+    prop.treated=p,
+    sim.se=sd(replications$est.ate),
+    sim.ate=mean(replications$est.ate),
+    mean.est.se=mean(replications$est.se))
+}

@@ -1,3 +1,7 @@
+# Last updated May 29 2014, 11:09pm PST.
+
+# First time users: install packages by uncommenting the following line.
+#install.packages('plyr', 'dplyr', 'ggplot2', 'foreach', 'lmtest', 'sandwich', 'Hmisc', 'data.table')
 
 library('plyr')
 library('dplyr')
@@ -7,6 +11,8 @@ library('lmtest')
 library('sandwich')
 library('Hmisc')
 library('data.table')
+
+options(digits=3)
 
 #######################################################
 ##### Sampling distributions and standard errors ######
@@ -19,7 +25,10 @@ library('data.table')
 
 N <- 1e3
 p <- 0.2
-replications <- replicate(2000, mean(rbinom(N, 1, p)))
+num.replications <- 2000
+replications <- replicate(num.replications, mean(rbinom(N, 1, p)))
+# replications <- rbinom(N, num.replications, p)/num.replications  # equivalently?
+est.p <- mean(replications)
 hist(replications, xlim=c(0,0.4))
 
 # The above plot is called the sampling distribution.
@@ -28,9 +37,13 @@ hist(replications, xlim=c(0,0.4))
 # 95% of our estimates of p fall within this range:
 quantile(replications, c(0.025, 0.975))
 
-# for large sample sizes, we can approximate this using
-se = sqrt(p*(1-p)/N)        # normal approximation
-c(p - 1.96*se, p + 1.96*se) # norm approx 95% CI
+# for large sample sizes, we can approximate this using the following
+se = sqrt(est.p*(1-est.p)/N)        # normal approximation
+c(est.p - 1.96*se, est.p + 1.96*se) # norm approx 95% CI
+
+se = sd(replications)
+c(est.p - 1.96*se, est.p + 1.96*se)
+
 
 # let's construct the confidence intervals for p for a few values of p, N
 d <- expand.grid(p=c(0.05, 0.25, 0.5), n=seq(100, 1e4, 100))
@@ -93,14 +106,30 @@ get.ci(my.experiment)
 ##### Type I, Type II, and Type M Errors  #######
 #################################################
 
+# To investigate the variation we get when repeating a hypothetical experiment
+# multiple times, we simulate. Here is one simple simulation where the potential
+# outcome under the control is norm(10,3), an additive treatment effect of 'ate'.
+# Subjects are assigned to the treatment condition (D) with equal probability.
+# The function finally returns a dataframe with a row for each subject, her
+# potential outcomes, treatment status, and observed outcome.
+
 run.trial <- function(n, ate) {
   my.experiment <- data.frame(
-    y0=rnorm(n, mean=10, sd=3), D=rbinom(n, 1, 0.5))
-  mutate(my.experiment, y1=y0 + ate, y=D*y1 + (1-D)*y0)
+    y0=rnorm(n, mean=10, sd=3))
+  mutate(my.experiment,
+    y1=y0 + ate,
+    D=rbinom(n, 1, 0.5),
+    y=D*y1 + (1-D)*y0)
 }
 
+run.trial(n=8, ate=5)
 
+# This function runs an experiment multiple times (num.replications),
+# and generates a dataframe containing estimates of the treatment effects and
+# standard errors for each experiment, sorted by the size of the effect.
 replicate.experiment <- function(n, ate, num.replications=100) {
+  # Note: you can parallelize this process below by using %dopar% if
+  # you have the 'doMC' package installed.
   exps <- foreach(replication=1:num.replications, .combine=rbind) %do% {
   	as.data.frame(get.ci(run.trial(n, ate)))
   }
@@ -156,4 +185,3 @@ mean(sad.experiments$significant)
 # when experiments are underpowered, only reporting on significant experiments
 # can massively overstate effects.
 with(subset(sad.experiments, significant==TRUE), mean(est.ate))
-

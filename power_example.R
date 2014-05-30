@@ -12,6 +12,8 @@ library('sandwich')
 library('Hmisc')
 library('data.table')
 
+options(digits=3)
+
 #######################################################
 ##### Sampling distributions and standard errors ######
 #######################################################
@@ -23,7 +25,10 @@ library('data.table')
 
 N <- 1e3
 p <- 0.2
-replications <- replicate(2000, mean(rbinom(N, 1, p)))
+num.replications <- 2000
+replications <- replicate(num.replications, mean(rbinom(N, 1, p)))
+# replications <- rbinom(N, num.replications, p)/num.replications  # equivalently?
+est.p <- mean(replications)
 hist(replications, xlim=c(0,0.4))
 
 # The above plot is called the sampling distribution.
@@ -32,9 +37,13 @@ hist(replications, xlim=c(0,0.4))
 # 95% of our estimates of p fall within this range:
 quantile(replications, c(0.025, 0.975))
 
-# for large sample sizes, we can approximate this using
-se = sqrt(p*(1-p)/N)        # normal approximation
-c(p - 1.96*se, p + 1.96*se) # norm approx 95% CI
+# for large sample sizes, we can approximate this using the following
+se = sqrt(est.p*(1-est.p)/N)        # normal approximation
+c(est.p - 1.96*se, est.p + 1.96*se) # norm approx 95% CI
+
+se = sd(replications)
+c(est.p - 1.96*se, est.p + 1.96*se)
+
 
 # let's construct the confidence intervals for p for a few values of p, N
 d <- expand.grid(p=c(0.05, 0.25, 0.5), n=seq(100, 1e4, 100))
@@ -97,14 +106,30 @@ get.ci(my.experiment)
 ##### Type I, Type II, and Type M Errors  #######
 #################################################
 
+# To investigate the variation we get when repeating a hypothetical experiment
+# multiple times, we simulate. Here is one simple simulation where the potential
+# outcome under the control is norm(10,3), an additive treatment effect of 'ate'.
+# Subjects are assigned to the treatment condition (D) with equal probability.
+# The function finally returns a dataframe with a row for each subject, her
+# potential outcomes, treatment status, and observed outcome.
+
 run.trial <- function(n, ate) {
   my.experiment <- data.frame(
-    y0=rnorm(n, mean=10, sd=3), D=rbinom(n, 1, 0.5))
-  mutate(my.experiment, y1=y0 + ate, y=D*y1 + (1-D)*y0)
+    y0=rnorm(n, mean=10, sd=3))
+  mutate(my.experiment,
+    y1=y0 + ate,
+    D=rbinom(n, 1, 0.5),
+    y=D*y1 + (1-D)*y0)
 }
 
+run.trial(n=8, ate=5)
 
+# This function runs an experiment multiple times (num.replications),
+# and generates a dataframe containing estimates of the treatment effects and
+# standard errors for each experiment, sorted by the size of the effect.
 replicate.experiment <- function(n, ate, num.replications=100) {
+  # Note: you can parallelize this process below by using %dopar% if
+  # you have the 'doMC' package installed.
   exps <- foreach(replication=1:num.replications, .combine=rbind) %do% {
   	as.data.frame(get.ci(run.trial(n, ate)))
   }
@@ -166,7 +191,7 @@ with(subset(sad.experiments, significant==TRUE), mean(est.ate))
 
 options(digits=3)
 
-N <- 1e6
+N <- 1e5
 mu <- -0.05
 
 gdata <- data.frame(
@@ -178,15 +203,31 @@ gdata <- mutate(gdata,
   num.friends=rnorm(N, 360, 20),
   gifts.received=rbinom(N, floor(0.015*num.friends/6),
     pnorm(mu + generosity + rnorm(N, 0, 0.01))),
-  gift.utility=mu+generosity + 0.05*gifts.received + rnorm(N, 0, 0.01),
-  gave.gift=ifelse(gift.utility>0, 1, 0)
+  gift.utility=mu + generosity + rnorm(N, 0, 0.01),
+  gave.gift=ifelse(gift.utility + 0.05*gifts.received>0, 1, 0),
+  gave.gift.no.peer=ifelse(gift.utility > 0, 1, 0),
+  gave.gift.forced.peer=ifelse(gift.utility + 0.05 > 0, 1, 0)
 )
+
+qplot(gift.utility, data=gdata, xlim=c(-0.15, 0.05)) + facet_grid(facets=gave.gift~., scales='free')
 
 
 hist(gdata$gifts.received)
 hist(gdata$gift.utility)
 mean(gdata$gifts.received)
-mean(gdata$gave.gift)
+mean(gdata$gave.gift.no.peer)
+mean(gdata$gave.gift.forced.peer)
+
+mean(pnorm(gdata$gave.gift.forced.peer)) - mean(pnorm(gdata$gave.gift.no.peer))
+mean(pnorm(gdata$gave.gift.forced.peer)) - mean(pnorm(gdata$gave.gift.no.peer))
+
+
+qplot(gift.utility, data=gdata, fill=factor(gave.gift))
+
+
+qplot(gift.utility, data=gdata, xlim=c(-0.15, 0.05)) + facet_grid(facets=gave.gift~., scales='free')
+qplot(gift.utility, data=gdata, xlim=c(-0.15, 0.05)) + facet_grid(facets=gave.gift0~., scales='free')
+
 
 
 summary(lm(gave.gift ~ I(gifts.received>0), data=gdata))
@@ -197,6 +238,8 @@ d <- gdata %>% group_by(gifts.received) %>%
 d
 
 qplot(gifts.received, p, data=d) + geom_pointrange(aes(ymin=p-1.96*se,ymax=p+1.96*se))
+
+
 
 0.49-0.01 # naive.effect
 0.49/0.011

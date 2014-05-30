@@ -20,39 +20,68 @@ options(digits=3)
 
 # In an experiment we're interested in the difference of two averages.
 # Our certainty about the value of an average depends on the number of
-# samples we have. For example, consider the mean of a bernoulli random
-# variable.
+# samples we have. Before we dive into the variation we see in the
+# difference of two means, let's look at the variance of a single variable.
 
+# Consider the mean of a bernoulli random variable, where we flip a coin
+# that lands on 1 with probability p, and 0 with probability (1-p).
+
+# We flip a coin N times, observe the average number of times it lands on 1,
+# and take measurements of this mean num.replications times.
 N <- 1e3
 p <- 0.2
 num.replications <- 2000
 replications <- replicate(num.replications, mean(rbinom(N, 1, p)))
 # replications <- rbinom(N, num.replications, p)/num.replications  # equivalently?
-est.p <- mean(replications)
+
+
+#### Sampling distributions and standard errors
+
+# Here is the variability in the estimates.
+# This is called the sampling distribution.
 hist(replications, xlim=c(0,0.4))
 
-# The above plot is called the sampling distribution.
-# The standard error is the standard deviation of the sampling distribution.
+# It converges to p.
+est.p <- mean(replications)
 
+# The standard error is the standard deviation of the sampling distribution.
 # 95% of our estimates of p fall within this range:
 quantile(replications, c(0.025, 0.975))
 
-# for large sample sizes, we can approximate this using the following
-se = sqrt(est.p*(1-est.p)/N)        # normal approximation
-c(est.p - 1.96*se, est.p + 1.96*se) # norm approx 95% CI
-
+# Alternatively, we can use the standard deviation.
 se = sd(replications)
+se
 c(est.p - 1.96*se, est.p + 1.96*se)
 
+# For large sample sizes, we can approximate this using the following,
+# without explicitly constructing the sampling distribution.
+p.single.trial = mean(rbinom(N, 1, p))
+se = sqrt(p.single.trial*(1-p.single.trial)/N)        # normal approximation
+se
+c(p.single.trial - 1.96*se, p.single.trial + 1.96*se) # norm approx 95% CI
+
+# This is equivalent to what comes out of a linear regression.
+d <- data.frame(y=rbinom(N, 1, p))
+summary(lm(y ~ 1, data=d))
+
+
+#### Standard errors and N.
 
 # let's construct the confidence intervals for p for a few values of p, N
 d <- expand.grid(p=c(0.05, 0.25, 0.5), n=seq(100, 1e4, 100))
 d <- mutate(d, se=sqrt(p*(1-p)/n))
 qplot(n, p, data=d, color=factor(p), ylab='p (with 95% confidence interval)') + geom_errorbar(aes(ymin=p-1.96*se, ymax=p+1.96*se))
 
-# you can see that the standard error rapidly diminishes with N
+# you can see that the standard error rapidly diminishes with N.
+# (sqrt(1/n), in particular).
 qplot(n, se, data=d, color=factor(p), geom='line', ylab='standard error')
 
+
+## Exercise 1: Do the same thing with a normal distribution
+## Exercise 2: Do the same thing with a skewed distribution, like the lognorm
+##             (you can generate a log-norm with rlnorm().
+##             Do you notice any difference between how big your N has to be
+##             in order for the 
 
 
 ##################################################################
@@ -73,6 +102,7 @@ control.subjects <- subset(my.experiment, D==0)
 mean(treated.subjects$y) - mean(control.subjects$y)
 
 # ??????????????? Compute CIs via t.test
+## @sjt Doesn't seem to work, what am I doing wrong?
 t.test(treated.subjects, control.subjects)
 
 # or via linear regression

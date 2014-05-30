@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Summary</title>
+    <link rel="stylesheet" href="/static/squaregrid.css" />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+<body>
+<div id="fb-root"></div>
+  <div id="wrapper">
+    <div id="container">
+      <form method="POST" action="/">
+      <div class="sg-5"></div>
+      <div class="sg-19">
+        <h1>Please choose {{k}} stories to summarize:</h1>
+      </div>
+      <div class="clear"></div>
+      {% for i, s in stories %}
+      <div class="sg-5"></div>
+      <div class="sg-15 fb-story sgParent">
+        <div class="sg-2 tight-bottom">
+          <img class="story-image" src="/static/img/{{sources[i]}}.jpg"></img>
+        </div>
+        <div class="sg-11 tight-bottom">
+          <div class="headline">{{s['headline']}}</div>
+          <div class="fb-permalink">32 mins</div>
+        </div>
+        <div class="clear"></div>
+        <div class="sg-17 status-text">
+        </div>
+        <div class="clear"></div>
+      </div>
+      <div class="sg-11">
+        <textarea name="{{i}}" rows=6 cols=44></textarea>
+      </div>
+      <div class="clear"></div>
+      {% end %}
+      <div class="sg-5"></div>
+      <div class="sg-27">
+        <input class="submit" type="submit" value="Continue"></input>
+      </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

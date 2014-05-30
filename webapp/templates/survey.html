@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Survey</title>
+    <link rel="stylesheet" href="/static/squaregrid.css" />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+<body>
+<div id="fb-root"></div>
+  <div id="wrapper">
+    <div id="container">
+      <form method="POST" action="/survey">
+      <div class="sg-5"></div>
+      <div class="sg-19">
+        <h1>Please complete this short survey:</h1>
+      </div>
+      <div class="clear"></div>
+
+      <div class="sg-5"></div>
+      {% for i, label in scale %}
+      <div class="sg-3">
+        <input type="radio" name="politics" value="{{i}}" />
+        <div>{{label}}</div>        
+      </div>
+      {% end %}
+      <div class="clear"></div>
+
+      <div class="sg-5"></div>
+      <div class="sg-19">
+        <input class="submit" type="submit" value="Submit"></input>
+      </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+/* RESET CSS by http://meyerweb.com/eric/tools/css/reset/ */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin:0; padding:0; border:0; outline:0;	font-size:100%; vertical-align:baseline; background:transparent;}
+body {line-height:1;}
+ol, ul {list-style:none;}
+blockquote, q {quotes:none;}
+blockquote:before, blockquote:after, q:before, q:after {content:''; content:none;}
+:focus {outline:0;} /* remember to define focus styles! */
+ins {text-decoration:none;} /* remember to highlight inserts somehow! */
+del {text-decoration:line-through;} 
+table {border-collapse:collapse; border-spacing:0;} /* tables still need 'cellspacing="0"' in the markup */
+.clear { clear:both; display:block; overflow:hidden; visibility:hidden; width:0; height:0;} /* source: http://sonspring.com/journal/clearing-floats */
+
+/* BEGIN SQUARE GRID CODE */
+body {background-color:#f4f4f4; font-size:62.5%; line-height:28px; /* for RTL add: 'direction: rtl;' */ }
+
+/* your main wrapping div */
+#wrapper{ margin: 0 auto; position:relative; overflow: hidden; width: 994px;background:#fff url(../images/sg_grid_sub.png) center top repeat; }
+#container{width:1008px; /* essential */ margin-left:-7px;}
+
+/* global styling to apply to all columns */
+.sg-1, .sg-2, .sg-3, .sg-4, .sg-5, .sg-6, .sg-7, .sg-8, .sg-9, .sg-10, .sg-11, .sg-12, .sg-13, .sg-14, .sg-15, .sg-16, .sg-17, .sg-18, .sg-19, .sg-20, .sg-21, .sg-22, .sg-23, .sg-24, .sg-25, .sg-26, .sg-27, .sg-28, .sg-29, .sg-30, .sg-31, .sg-32, .sg-33, .sg-34, .sg-35
+{margin:0px 14px 28px 14px; float:left; /* for RTL change float to 'right' */ }
+
+/* if you want to have a div as a parent with divs inside - add this class to parent div */
+.sgParent{margin:0px;}
+
+/* essential: width for all columns */
+.sg-1{width:28px} .sg-2{width:56px} .sg-3{width:84px} .sg-4{width:112px} .sg-5{width:140px} .sg-6{width:168px} .sg-7{width:196px} .sg-8{width:224px} .sg-9{width:252px} .sg-10{width:280px} .sg-11{width:308px} .sg-12{width:336px} .sg-13{width:364px} .sg-14{width:392px} .sg-15{width:420px} .sg-16{width:448px} .sg-17{width:476px} .sg-18{width:504px} .sg-19{width:532px} .sg-20{width:560px} .sg-21{width:588px} .sg-22{width:616px} .sg-23{width:644px} .sg-24{width:672px} .sg-25{width:700px} .sg-26{width:728px} .sg-27{width:756px} .sg-28{width:784px} .sg-29{width:812px} .sg-30{width:840px} .sg-31{width:868px} .sg-32{width:896px} .sg-33{width:924px} .sg-34{width:952px} .sg-35{width:980px}
+
+/* add a dividing border to the right or left simply by addiing one of these classes to a div */
+.borderRight{border-right:1px solid #222; margin-right:0px; padding-right:13px;}
+.borderLeft  {border-left:1px solid #222; margin-left:0px; padding-left:13px;}
+
+/* CONTROLLER - optional */
+#controller{position:fixed; top:14px; right:14px; z-index:9999;}
+#controller ul{border-color:#222; border-style:solid; border-width:0px 1px;}
+#controller ul li a{color:#222; display:block; font:14px/26px Verdana ; height:26px; width:26px; margin:1px; text-align:center; text-decoration:none;}
+#controller ul li a:hover{font-weight:bold;}
+#controller ul li.selected a{background-color:#222; color:#fff; font-weight:bold;}

@@ -1,0 +1,64 @@
+body {
+  font-family: Helvetica, Arial, 'lucida grande', tahoma, verdana, arial, sans-serif;
+}
+#example-a, #example-b{
+  background-color: #EEE;
+  min-height: 200px;
+}
+.fb-story {
+  padding: 12px;
+}
+.story-image {
+  width: 56px;
+  height: 56px;
+}
+.headline {
+  font-size: 14px;
+  font-weight: bold;
+  color: #3b5998;
+  cursor: pointer;
+}
+.fb-permalink {
+  color: rgb(137, 143, 156);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: normal;
+}
+.status-text {
+  color: rgb(20, 24, 35);
+  direction: ltr;
+  display: inline;
+  font-size: 14px;
+  font-weight: normal;
+  height: auto;
+  line-height: 19.31999969482422px;
+}
+.tight-bottom {
+  margin-bottom: 0px;
+}
+
+h1 {
+  color: rgb(137, 143, 156);
+  font-size: 28px;
+}
+
+.submit {
+    background-color: #ccc;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius:6px;
+    color: #fff;
+    font-size: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    border:none;
+    width: 100%;
+}
+
+
+
+.submit:hover {
+    border: none;
+    background: #eee;
+    box-shadow: 0px 0px 1px #777;
+}

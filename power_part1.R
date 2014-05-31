@@ -1,7 +1,7 @@
 # Last updated May 29 2014, 11:09pm PST.
 
 # First time users: install packages by uncommenting the following line.
-#install.packages('plyr', 'dplyr', 'ggplot2', 'foreach', 'lmtest', 'sandwich', 'Hmisc', 'data.table')
+#install.packages(c('dplyr', 'ggplot2', 'foreach', 'lmtest', 'sandwich', 'Hmisc', 'data.table', 'doMC'))
 
 library('plyr')
 library('dplyr')
@@ -28,7 +28,7 @@ options(digits=3)
 
 # We flip a coin N times, observe the average number of times it lands on 1,
 # and take measurements of this mean num.replications times.
-N <- 1e4
+N <- 1e2
 p <- 0.2
 num.replications <- 2000
 replications <- replicate(num.replications, mean(rbinom(N, 1, p)))
@@ -41,27 +41,25 @@ replications <- replicate(num.replications, mean(rbinom(N, 1, p)))
 # This is called the sampling distribution.
 hist(replications, xlim=c(0,0.4))
 
-# It converges to p.
-est.p <- mean(replications)
-
 # The standard error is the standard deviation of the sampling distribution.
 # 95% of our estimates of p fall within this range:
 quantile(replications, c(0.025, 0.975))
 
 # Alternatively, we can use the standard deviation.
-se = sd(replications)
+se <- sd(replications)
 se
 c(est.p - 1.96*se, est.p + 1.96*se)
 
 # For large sample sizes, we can approximate this using the following,
 # without explicitly constructing the sampling distribution.
-p.single.trial = mean(rbinom(N, 1, p))
-se = sqrt(p.single.trial*(1-p.single.trial)/N)        # normal approximation
+single.trial <- rbinom(N, 1, p)
+p.single.trial <- mean(single.trial)
+se <- sqrt(p.single.trial*(1-p.single.trial)/N)        # normal approximation
 se
 c(p.single.trial - 1.96*se, p.single.trial + 1.96*se) # norm approx 95% CI
 
 # This is equivalent to what comes out of a linear regression.
-d <- data.frame(y=rbinom(N, 1, p))
+d <- data.frame(y=single.trial)
 coeftest(lm(y ~ 1, data=d))
 
 
@@ -103,7 +101,7 @@ mean(treated.subjects$y) - mean(control.subjects$y)
 
 # ??????????????? Compute CIs via t.test
 ## @sjt Doesn't seem to work, what am I doing wrong?
-t.test(treated.subjects, control.subjects)
+t.test(treated.subjects$y, control.subjects$y)
 
 # or via linear regression: should probably use HC errors
 m <- lm(y ~ D, data=my.experiment)
@@ -114,7 +112,7 @@ est.se <- coeftest(m)['D', 'Std. Error']
 
 c(est.ate-1.96*est.se, est.ate+1.96*est.se)
 
-
+d
 # Here is a function that returns confidence intervals for a binary
 # treatment D.
 
@@ -257,3 +255,5 @@ exps <- foreach(p=seq(0.01, 0.2, 0.1), .combine=rbind) %dopar% {
     sim.ate=mean(replications$est.ate),
     mean.est.se=mean(replications$est.se))
 }
+
+

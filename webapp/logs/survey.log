@@ -135,3 +135,13 @@
 {"inputs": {"userid": "4188d5d0-5149-4bd2-8daf-4fb396bdcfd1"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401634886, "salt": "Likert", "event": "exposure"}
 {"inputs": {"userid": "4188d5d0-5149-4bd2-8daf-4fb396bdcfd1"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401634892, "extra_data": {"resp": 1}, "salt": "Likert", "event": "response"}
 {"inputs": {"userid": "61af977f-af9a-4b2a-9328-fb5c5cd24777"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401635023, "salt": "Likert", "event": "exposure"}
+{"inputs": {"userid": "aebe345e-ba7e-499b-9f39-adcc47dd12bc"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401635482, "salt": "Likert", "event": "exposure"}
+{"inputs": {"userid": "96eb7ad7-2576-42d7-a752-8de5b39950f4"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401635518, "salt": "Likert", "event": "exposure"}
+{"inputs": {"userid": "96eb7ad7-2576-42d7-a752-8de5b39950f4"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401635522, "extra_data": {"resp": 4}, "salt": "Likert", "event": "response"}
+{"inputs": {"userid": "50fd294e-613e-453c-a61b-456693888c57"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 0}, "time": 1401636897, "salt": "Likert", "event": "exposure"}
+{"inputs": {"userid": "77a66132-d0f1-40e7-a797-a94c5e8eff5d"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 0}, "time": 1401637046, "salt": "Likert", "event": "exposure"}
+{"inputs": {"userid": "77a66132-d0f1-40e7-a797-a94c5e8eff5d"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 0}, "time": 1401637052, "extra_data": {"resp": 3}, "salt": "Likert", "event": "response"}
+{"inputs": {"userid": "2a192328-7c8d-4269-a275-ee5c763b9a0c"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401637143, "salt": "Likert", "event": "exposure"}
+{"inputs": {"userid": "2a192328-7c8d-4269-a275-ee5c763b9a0c"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401637154, "extra_data": {"resp": 2}, "salt": "Likert", "event": "response"}
+{"inputs": {"userid": "a2d89acc-7ab1-452d-a4a3-7192beead60c"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401637329, "salt": "Likert", "event": "exposure"}
+{"inputs": {"userid": "a2d89acc-7ab1-452d-a4a3-7192beead60c"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401637337, "extra_data": {"resp": 3}, "salt": "Likert", "event": "response"}

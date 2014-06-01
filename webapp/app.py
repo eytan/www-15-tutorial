@@ -18,7 +18,6 @@ class CueExperiment(SimpleExperiment):
         self.set_log_file('logs/experiment.log')
 
     def assign(self, params, userid, story_keys):
-        userid += 'foobar'
         params.story_keys = Sample(choices=story_keys, unit=userid)
         balanced_sources = list(islice(cycle([
             'msnbc',
@@ -128,7 +127,7 @@ if __name__ == '__main__':
             (r'/thanks', Thanks),
             (r'/static/(.*)', StaticFileHandler, {"path": "static"})
         ],
-        debug=True,
+        debug=False,
         static_path='static',
         cookie_secret='0.2752290303981113',
     )

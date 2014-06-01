@@ -1,5 +1,5 @@
 
-
+import json
 from uuid import uuid4
 from itertools import islice, cycle
 
@@ -93,13 +93,8 @@ class Thanks(BaseRequestHandler):
         self.render('templates/thanks.html')
 
 class SummariseContent(BaseRequestHandler):
-    stories = {
-        0: {'headline': 'Ten things Facebook doesn\'t want you to know.'},
-        1: {'headline': 'The NSA is Spying on You!'},
-        2: {'headline': 'Girl Scout Cookies Deemed Dangerous'},
-        3: {'headline': 'Florida Man Involved in Major Accident'},
-        4: {'headline': 'Causal Inference is Cool'},
-    }
+    with open('stories.json') as f:
+        stories = {int(k): v for k, v in json.load(f).iteritems()}
     story_keys = sorted(stories.keys())
  
     def get(self):
@@ -123,7 +118,8 @@ class SummariseContent(BaseRequestHandler):
         )
         exp.log_event('summary', self.request.arguments)
         self.redirect('/survey')
-        
+
+
 if __name__ == '__main__':
     app = Application(
         [
@@ -137,5 +133,5 @@ if __name__ == '__main__':
         cookie_secret='0.2752290303981113',
     )
     http_server = HTTPServer(app)
-    http_server.listen(8080)
+    http_server.listen(9000, address='127.0.0.1')
     IOLoop.instance().start()

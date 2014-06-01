@@ -1,3 +1,4 @@
+{% autoescape None %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -23,10 +24,11 @@
         </div>
         <div class="sg-11 tight-bottom">
           <div class="headline">{{s['headline']}}</div>
-          <div class="fb-permalink">32 mins</div>
+          <!--<div class="fb-permalink">32 mins</div>-->
         </div>
         <div class="clear"></div>
-        <div class="sg-17 status-text">
+        <div class="sg-15 status-text">
+        {{s['text']}}
         </div>
         <div class="clear"></div>
       </div>

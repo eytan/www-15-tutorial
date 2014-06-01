@@ -14,6 +14,8 @@ library('data.table')
 
 options(digits=3)
 
+setwd('~/website/icwsm-14-tutorial')
+
 #######################################################
 ##### Sampling distributions and standard errors ######
 #######################################################
@@ -32,7 +34,6 @@ N <- 1e2
 p <- 0.2
 num.replications <- 2000
 replications <- replicate(num.replications, mean(rbinom(N, 1, p)))
-# replications <- rbinom(N, num.replications, p)/num.replications  # equivalently?
 
 
 #### Sampling distributions and standard errors
@@ -45,20 +46,27 @@ hist(replications, xlim=c(0,0.4))
 # 95% of our estimates of p fall within this range:
 quantile(replications, c(0.025, 0.975))
 
-# Alternatively, we can use the standard deviation.
-se <- sd(replications)
-se
-c(est.p - 1.96*se, est.p + 1.96*se)
+# Alternatively, we can use the standard deviation of the sampling distribution.
+# which is approximately normal for sufficiently large N.
+est.se <- sd(replications)
+mean.est.p <- mean(replications)
+mean.est.p
+est.se
+c(mean.est.p - 1.96*est.se, mean.est.p + 1.96*est.se)
 
 # For large sample sizes, we can approximate this using the following,
 # without explicitly constructing the sampling distribution.
 single.trial <- rbinom(N, 1, p)
 p.single.trial <- mean(single.trial)
-se <- sqrt(p.single.trial*(1-p.single.trial)/N)        # normal approximation
-se
-c(p.single.trial - 1.96*se, p.single.trial + 1.96*se) # norm approx 95% CI
 
-# This is equivalent to what comes out of a linear regression.
+# normal approximation of SE
+se <- sqrt(p.single.trial*(1-p.single.trial)/N)
+se
+
+# norm approx 95% CI
+c(p.single.trial - 1.96*se, p.single.trial + 1.96*se)
+
+# This is close to what comes out of a linear regression.
 d <- data.frame(y=single.trial)
 coeftest(lm(y ~ 1, data=d))
 
@@ -66,55 +74,82 @@ coeftest(lm(y ~ 1, data=d))
 #### Standard errors and N.
 
 # let's construct the confidence intervals for p for a few values of p, N
-d <- expand.grid(p=c(0.05, 0.25, 0.5), n=seq(100, 1e4, 100))
+d <- expand.grid(p=c(0.05, 0.25, 0.5), n=seq(100, 2000, 100))
 d <- mutate(d, se=sqrt(p*(1-p)/n))
-qplot(n, p, data=d, color=factor(p), ylab='p (with 95% confidence interval)') + geom_errorbar(aes(ymin=p-1.96*se, ymax=p+1.96*se))
+head(d)
+
+qplot(n, p, data=d, color=factor(p),
+  ylab='p (with 95% confidence interval)') +
+  geom_errorbar(aes(ymin=p-1.96*se, ymax=p+1.96*se))
 
 # you can see that the standard error rapidly diminishes with N.
 # (sqrt(1/n), in particular).
 qplot(n, se, data=d, color=factor(p), geom='line', ylab='standard error')
 
 
-## Exercise 1: Do the same thing with a normal distribution
-## Exercise 2: Do the same thing with a skewed distribution, like the lognorm
-##             (you can generate a log-norm with rlnorm().
-##             Do you notice any difference between how big your N has to be
-##             in order for the 
-
 
 ##################################################################
 ##### Confidence intervals for an average treatment effect #######
 ##################################################################
 
-# Let's consider an experiment an experiment with a binary treatment, D.
+# Let's consider a simulated experiment with a binary treatment, D.
 
-N <- 1e3
-ate <- 2.0
-my.experiment <- data.frame(y0=rnorm(N, mean=10, sd=3), D=rbinom(N, 1, 0.5))
-my.experiment <- mutate(my.experiment, y1=y0+ate, y=D*y1 + (1-D)*y0)
-qplot(y, geom='histogram', data=my.experiment, facets=D~.)
+# The function returns a dataframe with a row for each subject, her
+# potential outcomes, treatment status, and observed outcome.
+# The inputs are the number of subjects and the ATE.
+run.experiment <- function(n, ate) {
+  my.experiment <- data.frame(
+    y0=rnorm(n, mean=10, sd=3))
+  mutate(my.experiment,
+    y1=y0 + ate,
+    D=rbinom(n, 1, 0.5),
+    y=D*y1 + (1-D)*y0)
+}
 
-# We can compute the difference in means
-treated.subjects <- subset(my.experiment, D==1)
-control.subjects <- subset(my.experiment, D==0)
-mean(treated.subjects$y) - mean(control.subjects$y)
+my.experiment <- run.experiment(500, 2.0)
 
-# ??????????????? Compute CIs via t.test
-## @sjt Doesn't seem to work, what am I doing wrong?
-t.test(treated.subjects$y, control.subjects$y)
+head(my.experiment)
 
-# or via linear regression: should probably use HC errors
+qplot(y, geom='histogram', data=my.experiment, facets=D~.) + theme_bw()
+
+compute.ate <- function(exp) {
+  mean(exp[exp$D==1,]$y) - mean(exp[exp$D==0,]$y)
+}
+
+# We can compute the difference in means for a single experiment
+compute.ate(my.experiment)
+
+# Now, let's compute the diffence in means for 2000 replications
+# of our experiment. This is the sampling distribution of the ATE.
+
+num.replications <- 2e3
+ates <- replicate(
+  num.replications,
+  compute.ate(run.experiment(n=1e3, 2.0)))
+
+hist(ates, main='sampling distribution of ATE')
+
+# 95% of the estimated treated effects lie within this range
+quantile(ates, c(0.025, 0.975))
+
+# Large sample approximations let us make statements about the
+# variance of the ATE over different (similar) populations (or
+# possible randomizations).
+
+compute.ate(my.experiment)
+with(my.experiment, t.test(y[D==1], y[D==0]))
+
+# or via linear regression
 m <- lm(y ~ D, data=my.experiment)
-summary(m)
+coeftest(m)
 # take the SE for D, multiply by 1.96, e.g.,
 est.ate <- coeftest(m)['D', 'Estimate']
 est.se <- coeftest(m)['D', 'Std. Error']
 
 c(est.ate-1.96*est.se, est.ate+1.96*est.se)
 
-d
-# Here is a function that returns confidence intervals for a binary
-# treatment D.
+# Here is a function that returns confidence intervals for a dataframe
+# with an outcome y and a binary treatment D. We will use this later.
 
 get.ci <- function(experiment) {
   t <- coeftest(lm(y ~ D, data=experiment))
@@ -126,31 +161,18 @@ get.ci <- function(experiment) {
 
 get.ci(my.experiment)
 
-# The above is just one way of obtaining confidence intervals, and it
-# should work well for reasonably large N for any type of data.
-
+# For smaller sample sizes and/or heavily skewed outcomes, or non-iid data,
+# it is recommended to use other methods like the bootstrap (covered later),
+# randomization inference, or robust cluster standard errors.
 
 #################################################
 ##### Type I, Type II, and Type M Errors  #######
 #################################################
 
 # To investigate the variation we get when repeating a hypothetical experiment
-# multiple times, we simulate. Here is one simple simulation where the potential
-# outcome under the control is norm(10,3), an additive treatment effect of 'ate'.
-# Subjects are assigned to the treatment condition (D) with equal probability.
-# The function finally returns a dataframe with a row for each subject, her
-# potential outcomes, treatment status, and observed outcome.
+# multiple times, we simulate multiple replications of a randomized trial.
 
-run.trial <- function(n, ate) {
-  my.experiment <- data.frame(
-    y0=rnorm(n, mean=10, sd=3))
-  mutate(my.experiment,
-    y1=y0 + ate,
-    D=rbinom(n, 1, 0.5),
-    y=D*y1 + (1-D)*y0)
-}
-
-run.trial(n=8, ate=5)
+run.experiment(n=8, ate=5)
 
 # This function runs an experiment multiple times (num.replications),
 # and generates a dataframe containing estimates of the treatment effects and
@@ -174,8 +196,11 @@ replicate.experiment <- function(sim.func, params, num.replications=100) {
 # there is no effect.
 
 # run 100 trials of an experiment with no ATE
-null.experiments <- replicate.experiment(
-  run.trial, list(n=1e3, ate=0.0), num.replications=100)
+null.experiments <- replicate.experiment(run.experiment,
+  list(n=1e3, ate=0.0),
+  num.replications=100)
+
+qplot(est.ate, data=null.experiments, main="sampling distribution of ATE")
 
 # plot the results of the experiments, rank-ordered by effect size, along
 # with their confidence intervals. Experiments that are "significant" have
@@ -190,12 +215,13 @@ qplot(rank, est.ate, data=null.experiments, color=significant,
 # appropriate method for computing confidence intervals.
 mean(null.experiments$significant)
 
-# exercise: use R to show that the above is not significantly different than 0.05
+# exercise: use R to show that the above proportion not significantly different from 0.05
 
 ### Type II errors
 
 # this experiment has a true effect of +0.5 (out of an average, 10)
-sad.experiments <- replicate.experiment(run.trial, list(n=250, ate=0.5),
+sad.experiments <- replicate.experiment(run.experiment,
+  list(n=250, ate=0.5),
   num.replications=100)
 
 # plot the results of the experiments, rank-ordered by effect size, along
@@ -223,10 +249,12 @@ with(subset(sad.experiments, significant==TRUE), mean(est.ate))
 ##### Power analysis           ####
 ###################################
 
-# In earlier slides we came up with a few expressions for the standard error
-# Let's consider that again.
+# In earlier slides we came up with a few expressions for the standard
+# error.  Let's consider that again.
 
-run.trial2 <- function(n, ate, prop.treated=0.5, y.sd=3) {
+# Let's add two new agruments, the proportion treated, and the
+# standard deviation of the outcome variable.
+run.experiment2 <- function(n, ate, prop.treated=0.5, y.sd=3) {
   my.experiment <- data.frame(
     y0=rnorm(n, mean=10, sd=y.sd))
   mutate(my.experiment,
@@ -235,25 +263,52 @@ run.trial2 <- function(n, ate, prop.treated=0.5, y.sd=3) {
     y=D*y1 + (1-D)*y0)
 }
 
-reps <- replicate.experiment(run.trial2,
-  list(n=1e3, ate=1, prop.treated=0.5, y.sd=3),
-  num.replications=5)
-reps
-
-
-hist(reps$est.ate)
-
-exps <- foreach(p=seq(0.01, 0.2, 0.1), .combine=rbind) %dopar% {
+# Let's simulate a few replications with varying proportions of
+# users assigned to treatment and control.
+exps <- foreach(p=seq(0.05, 0.95, 0.05), .combine=rbind) %do% {
   varying.prop = list(n=1e3, ate=1, prop.treated=p, y.sd=3)
   replications <- replicate.experiment(
-    sim.func=run.trial2,
+    sim.func=run.experiment2,
     params=varying.prop,
     num.replications=250)
   data.frame(
     prop.treated=p,
     sim.se=sd(replications$est.ate),
     sim.ate=mean(replications$est.ate),
-    mean.est.se=mean(replications$est.se))
+    norm.est.se=head(replications$est.se, 1))
 }
 
+qplot(prop.treated, 1.96*sim.se, data=exps,
+      ylab='95% CI width', xlab='proportion of subjects in treatment',
+      ylim=c(0, 2.0), main='Precision of estimated ATE (simulation)')
 
+qplot(prop.treated, 1.96*norm.est.se, data=exps,
+       ylab='95% CI width', xlab='proportion of subjects in treatment',
+       ylim=c(0,2.0), main='Precision of estimated ATE (approximation)')
+
+
+# We will use a stripped down version that doesn't use replications for
+# demonstration purposes, using get.ci() with a single trial for each
+# parameterization.
+
+n <- 1e3
+true.ate <- 0.1
+p=0.5
+exps <- foreach(n=seq(100, 1e3, 1e2), .combine=rbind) %do% {
+  foreach(my.sd=c(1, 2, 3), .combine=rbind) %do% { 
+    my.experiment <- run.experiment2(
+      n=n, ate=1, prop.treated=0.5, y.sd=my.sd)
+    my.ses <- get.ci(my.experiment)
+    data.frame(n=n, sd=my.sd,
+               est.ate=my.ses$est.ate,
+               est.se=my.ses$est.se)
+  }
+}
+
+qplot(n, 1.96*est.se, data=exps, color=factor(sd), geom=c('line', 'point')) + geom_hline(aes(yintercept=true.ate), linetype='dashed')
+
+
+## Exercise 2: Do the same thing with a skewed distribution, like the lognorm
+##             (you can generate a log-norm with rlnorm().
+##             Do you notice any difference between how big your N has to be
+##             in order for the 

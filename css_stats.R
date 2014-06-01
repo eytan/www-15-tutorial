@@ -1,4 +1,4 @@
-library(coeftest)
+library(lmtest)
 library(Hmisc)
 library(foreach)
 
@@ -31,7 +31,7 @@ coeftest.freq <- function (object, vcov. = vcov, freq = NA, df = NA, ...)
 
 ## the bootstrap
 r.double.or.nothing <- function(n) {
-  2 * rbinom(n, 1, .5)
+  2 * rbinom(n, 1, .5)
 }
 
 clustered.bootstrap <- function(data, clusters, statistic, .R=250,

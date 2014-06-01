@@ -8,6 +8,8 @@ num.items <- 9
 num.subjects <- 250
 num.items.to.rate <- 3
 
+source('css_scripts.R')
+
 mu <- num.items.to.rate/num.items
 
 item.interestingness <- rnorm(num.items, 0, 0.02)

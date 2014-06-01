@@ -1,3 +1,4 @@
+{% autoescape None %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,7 +13,8 @@
       <form method="POST" action="/">
       <div class="sg-5"></div>
       <div class="sg-19">
-        <h1>Please choose {{k}} stories to summarize:</h1>
+        <h1>Please choose {{k}} stories to summarize.</h1>
+	<h2>Your summary should be one sentence only.</h2>
       </div>
       <div class="clear"></div>
       {% for i, s in stories %}
@@ -23,10 +25,11 @@
         </div>
         <div class="sg-11 tight-bottom">
           <div class="headline">{{s['headline']}}</div>
-          <div class="fb-permalink">32 mins</div>
+          <!--<div class="fb-permalink">32 mins</div>-->
         </div>
         <div class="clear"></div>
-        <div class="sg-17 status-text">
+        <div class="sg-15 status-text">
+        {{s['text']}}
         </div>
         <div class="clear"></div>
       </div>

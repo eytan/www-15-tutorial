@@ -66,3 +66,9 @@
 {"inputs": {"userid": "7a0f5e6d-e86b-4697-bf74-37021e9e5be0"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 0}, "time": 1401408251, "extra_data": {"resp": 1}, "salt": "Likert", "event": "response"}
 {"inputs": {"userid": "7a0f5e6d-e86b-4697-bf74-37021e9e5be0"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 0}, "time": 1401408257, "salt": "Likert", "event": "exposure"}
 {"inputs": {"userid": "7a0f5e6d-e86b-4697-bf74-37021e9e5be0"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 0}, "time": 1401408262, "extra_data": {"resp": 2}, "salt": "Likert", "event": "response"}
+{"inputs": {"userid": "69580951-44c7-4ce9-b1d1-e22342ecd1b3"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401590886, "salt": "Likert", "event": "exposure"}
+{"inputs": {"userid": "69580951-44c7-4ce9-b1d1-e22342ecd1b3"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401590888, "extra_data": {"resp": 1}, "salt": "Likert", "event": "response"}
+{"inputs": {"userid": "e4456ae6-724e-4c62-9ba5-6d031468704b"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401624587, "salt": "Likert", "event": "exposure"}
+{"inputs": {"userid": "e4456ae6-724e-4c62-9ba5-6d031468704b"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401624655, "salt": "Likert", "event": "exposure"}
+{"inputs": {"userid": "e4456ae6-724e-4c62-9ba5-6d031468704b"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401624659, "salt": "Likert", "event": "exposure"}
+{"inputs": {"userid": "e4456ae6-724e-4c62-9ba5-6d031468704b"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401624662, "extra_data": {"resp": 2}, "salt": "Likert", "event": "response"}

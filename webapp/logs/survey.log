@@ -132,3 +132,6 @@
 {"inputs": {"userid": "02856bc4-00c6-49a3-a3f1-3c43b7293551"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 0}, "time": 1401634515, "salt": "Likert", "event": "exposure"}
 {"inputs": {"userid": "2d846069-2c8e-4b4a-a3ff-9fb7bdd48a25"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401634582, "salt": "Likert", "event": "exposure"}
 {"inputs": {"userid": "2d846069-2c8e-4b4a-a3ff-9fb7bdd48a25"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401634592, "extra_data": {"resp": 2}, "salt": "Likert", "event": "response"}
+{"inputs": {"userid": "4188d5d0-5149-4bd2-8daf-4fb396bdcfd1"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401634886, "salt": "Likert", "event": "exposure"}
+{"inputs": {"userid": "4188d5d0-5149-4bd2-8daf-4fb396bdcfd1"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401634892, "extra_data": {"resp": 1}, "salt": "Likert", "event": "response"}
+{"inputs": {"userid": "61af977f-af9a-4b2a-9328-fb5c5cd24777"}, "name": "Likert", "checksum": "f9dfb298", "params": {"reversed_scale": 1}, "time": 1401635023, "salt": "Likert", "event": "exposure"}

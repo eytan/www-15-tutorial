@@ -40,6 +40,12 @@ body {
 h1 {
   color: rgb(137, 143, 156);
   font-size: 28px;
+  margin-bottom: 1em;
+}
+
+h2 {
+  color: rgb(100, 100, 100);
+  font-size: 24px;
 }
 
 .submit {

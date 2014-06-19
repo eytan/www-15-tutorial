@@ -2,35 +2,43 @@
 library('plyr')
 source('css_stats.R')
 
-Exp <- read.csv('experiment_data.csv', stringsAsFactors=F)
 
-Survey <- read.csv('survey_data.csv', stringsAsFactors=F)
-Survey <- subset(Survey, !is.na(response))
+Exp <- read.csv('webapp/experiment_data.csv', stringsAsFactors=F)
 
 ## uniquify the survey responses, take only the first resp
+Survey <- read.csv('webapp/survey_data.csv', stringsAsFactors=F)
+Survey <- subset(Survey, !is.na(response))
 Survey <- ddply(Survey, .(userid), summarise,
                 response = response[1],
                 reversed_scale = reversed_scale[1])
-
+Survey$subject.ideology <- Survey$response - 3
 ## convert the test to a binary outcome variable
 Exp$select <- with(Exp, as.numeric(summary != ''))
-
 ## join to survey data
-results <- join(Exp, Survey, by = 'userid', type = 'inner')
+results <- join(unique(Exp), Survey, by = 'userid', type = 'inner')
 
-## left == -1, right == 1
-results$source.ideology <- with(results, ifelse(source == 'foxnews', -1, 1))
-results$subject.ideology <- with(results, ifelse(response < 2, -1, 1))
+src2ideology <- c('foxnews'=1,'msnbc'=-1,'cnn'=0)
+results <- mutate(results,
+  source.ideology=src2ideology[source],
+  source.agreement=sign(source.ideology)==sign(subject.ideology),
+  subject.ideology=factor(sign(subject.ideology)))
 
-## treatment dummy
-results$source.agreement <- with(results, as.numeric(source.ideology * subject.ideology > 0))
+
+position.fx <- results %>% group_by(position) %>% summarise(frac.selected=mean(select))
+qplot(position, frac.selected, data=position.fx)
+
+position.fx <- results %>% group_by(position, source.ideology) %>% summarise(frac.selected=mean(select))
+position.fx
+qplot(position, frac.selected, data=position.fx, color=factor(source.ideology))
+
+rating.freqs <- results %>% group_by(userid) %>% summarise(num.selected=sum(select)) %>% group_by(num.selected) %>% summarise(freq=n())
 
 
 ## linear model without covariates (anti-conservative)
-summary(lm(select ~ source.agreement, data=results))
+summary(lm(select ~ source.agreement*subject.ideology + factor(position), data=subset(results, position==0)))
 
 ## linear model with covariates
-summary(lm(select ~ factor(position) + source.agreement, data=results))
+summary(lm(select ~ factor(position), data=results))
 
 baseline.diff <- function(data) {
 	y0 <- with(subset(data, source.agreement==FALSE), wtd.mean(select, .weights))

@@ -5,7 +5,7 @@ Welcome to the github repository for the ICWSM 2014 tutorial on online experimen
 
 
 ### Repository contents
--`webapp/`: Demo experiment, conducted on all tutorial participants. Includes data analyzed in `analyzing_experiments.R`.
+- `webapp/`: Demo experiment, conducted on all tutorial participants. Includes data analyzed in `analyzing_experiments.R`.
 
 - `0-planout-intro.ipynb`: IPython notebook containing an introduction to PlanOut and examples of experimental designs in PlanOut
 

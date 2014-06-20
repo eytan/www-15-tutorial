@@ -1,8 +1,31 @@
 ICWSM 2014 Tutorial
 =================
 
-Welcome to the github repository for the ICWSM 2014 tutorial on online experiments for computational social science!
+Welcome to the github repository for the ICWSM 2014 tutorial on online experiments for computational social science! You'll find files from
 
+
+### Repository contents
+-`webapp/`: Demo experiment, conducted on all tutorial participants. Includes data analyzed in `analyzing_experiments.R`.
+
+- `0-planout-intro.ipynb`: IPython notebook containing an introduction to PlanOut and examples of experimental designs in PlanOut
+
+- `1-logging.ipynb`: How logging works in PlanOut, with a worked example
+
+- `ICWSM Tutorial.pdf`: Slides for the non-coding part of the tutorial
+
+- `analyzing_experiments.R`: Analysis of demo experiment
+
+- `bootstrap.R`: Sample power analysis for the demo experiment
+
+- `css_stats.R`: Functions for working with weighted data and multi-way bootstrapping
+
+- `power_part1.R`: Intro to power analysis: confidence intervals for normal and binary data, using simulations to understand Type I, Type II, and Type M errors, and do power analysis.
+
+- `power_part2.R`: Critical thinking and power analysis exercise.
+
+- `power_part2_gen_data.R`: Script that generates fake data used in `power_part2.R`
+
+- `gift_data.csv`: Data used for power analysis exercise.
 
 
 ### Description of tutorial
@@ -28,16 +51,6 @@ Navigate to your checked out version of PlanOut and type:
 ```
 ipython notebook --pylab inline
 ```
-
-### Description of file contents
--`webapp/`: Demo experiment, conducted on all tutorial participants. Includes data analyzed in `analyzing_experiments.R`.
-- `0-planout-intro.ipynb`: IPython notebook containing an introduction to PlanOut and examples of experimental designs in PlanOut
-- `1-logging.ipynb`: How logging works in PlanOut, with a worked example
-- `ICWSM Tutorial.pdf`: Slides for the non-coding part of the tutorial
-- `analyzing_experiments.R`: Analysis of demo experiment
-- `bootstrap.R`: Sample power analysis for the demo experiment
-- `css_stats.R`: Functions for working with weighted data and multi-way bootstrapping
-- `power_part1.R`: Intro to power analysis: confidence intervals for normal and binary data, using simulations to understand Type I, Type II, and Type M errors, and do power analysis.
 
 ### More information
 See the (syllabus)[http://eytan.github.io/icwsm14_tutorial/] for more information about the tutorial.

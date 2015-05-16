@@ -1,7 +1,7 @@
-ICWSM 2014 Tutorial
+WWW 2015 Tutorial
 =================
 
-Welcome to the github repository for the ICWSM 2014 tutorial on online experiments for computational social science! You'll find files from
+Welcome to the github repository for the WWW 2015 tutorial on online experiments for computational social science! You'll find files from
 
 
 ### Repository contents
@@ -11,9 +11,7 @@ Welcome to the github repository for the ICWSM 2014 tutorial on online experimen
 
 - `1-logging.ipynb`: How logging works in PlanOut, with a worked example
 
-- `ICWSM Tutorial.pdf`: Slides for the non-coding part of the tutorial
-
-- `analyzing_experiments.R`: Analysis of demo experiment
+- `4-analyzing-experiments.ipynb`: How to analyze the experimental data we produced.
 
 - `bootstrap.R`: Sample power analysis for the demo experiment
 
@@ -53,5 +51,4 @@ ipython notebook --pylab inline
 ```
 
 ### More information
-See the (syllabus)[http://eytan.github.io/icwsm14_tutorial/] for more information about the tutorial.
-
+See the (syllabus)[https://eytan.github.io/www-15-tutorial/] for more information about the tutorial.

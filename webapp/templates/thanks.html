@@ -12,6 +12,9 @@
       <div class="sg-5"></div>
       <div class="sg-19">
         <h1>Thanks for participating!</h1>
+	{% if code is not None %}
+	<h2>Your code is <bold>{{code}}</bold></h2>.
+	{% end %}
       </div>
       <div class="clear"></div>
     </div>

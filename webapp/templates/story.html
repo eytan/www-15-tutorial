@@ -13,28 +13,28 @@
       <form method="POST" action="/">
       <div class="sg-5"></div>
       <div class="sg-19">
-        <h1>Please choose {{k}} stories to summarize.</h1>
-	<h2>Your summary should be one sentence only.</h2>
+        <h1>Create three keywords for some of the news stories below.</h1>
+	<h2>You only need to write keywords for {{k}} of the {{n}} below. Choose whichever {{'ones' if k > 1 else 'one'}} you prefer.</h2>
       </div>
       <div class="clear"></div>
-      {% for i, s in stories %}
+      {% for i, (story_key, story) in enumerate(stories) %}
       <div class="sg-5"></div>
       <div class="sg-15 fb-story sgParent">
         <div class="sg-2 tight-bottom">
           <img class="story-image" src="/static/img/{{sources[i]}}.jpg"></img>
         </div>
         <div class="sg-11 tight-bottom">
-          <div class="headline">{{s['headline']}}</div>
+          <div class="headline">{{story['headline']}}</div>
           <!--<div class="fb-permalink">32 mins</div>-->
         </div>
         <div class="clear"></div>
         <div class="sg-15 status-text">
-        {{s['text']}}
+        {{story['text']}}
         </div>
         <div class="clear"></div>
       </div>
       <div class="sg-11">
-        <textarea name="{{i}}" rows=6 cols=44></textarea>
+        <textarea name="{{story_key}}" rows=6 cols=44></textarea>
       </div>
       <div class="clear"></div>
       {% end %}

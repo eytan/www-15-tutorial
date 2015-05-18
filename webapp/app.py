@@ -78,7 +78,7 @@ class PoliticalSurvey(BaseRequestHandler):
 
         resp = self.get_argument('politics', None)
         if resp is None:
-            self.redirect('/survey')
+            return self.redirect('/survey')
         else:
             resp = int(resp)
 
@@ -91,14 +91,17 @@ class PoliticalSurvey(BaseRequestHandler):
 
 class Thanks(BaseRequestHandler):
     def get(self):
-        if self.get_secure_cookie('survey_taken') == '1':
+        enough = self.get_secure_cookie('enough_responses') == '1'
+        survey = self.get_secure_cookie('survey_taken') == '1'
+        if enough and survey:
             userid = self.get_secure_cookie('userid')
             code = hash(userid) % 1000000
         else:
             code = None
 
         self.render('templates/thanks.html',
-                    code=code)
+                    code=code,
+                    enough=enough)
 
 class SummariseContent(BaseRequestHandler):
     
@@ -132,6 +135,13 @@ class SummariseContent(BaseRequestHandler):
             n=self.n,
         )
         exp.log_event('summary', self.request.arguments)
+
+        num_responses = 0
+        for key in self.request.arguments:
+            if self.request.arguments[key][0] != '':
+                num_responses += 1
+        self.set_secure_cookie('enough_responses', '1' if num_responses >= self.k else '0')
+
         self.redirect('/survey')
 
 

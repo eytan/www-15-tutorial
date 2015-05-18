@@ -15,6 +15,10 @@
 	{% if code is not None %}
 	<h2>Your code is <bold>{{code}}</bold></h2>.
 	{% end %}
+	{% if not enough %}
+        <h2>You didn't create keywords for enough articles to successfully complete the task.</h2>
+	<h3>Would you like to <a href="/">start over</a>?.</h3>
+	{% end %}
       </div>
       <div class="clear"></div>
     </div>

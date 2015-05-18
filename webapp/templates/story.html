@@ -13,8 +13,8 @@
       <form method="POST" action="/">
       <div class="sg-5"></div>
       <div class="sg-19">
-        <h1>Create three keywords for some of the news stories below.</h1>
-	<h2>You only need to write keywords for {{k}} of the {{n}} below. Choose whichever {{'ones' if k > 1 else 'one'}} you prefer.</h2>
+        <h1>Please summarize {{'one' if k == 1 else 'some'}} of the articles below.</h1>
+	<h2>Write a <u>one sentence summary</u> of {{k}} of the {{n}} articles below. Choose whichever {{'ones' if k > 1 else 'one'}} you prefer.</h2>
       </div>
       <div class="clear"></div>
       {% for i, (story_key, story) in enumerate(stories) %}
@@ -25,7 +25,6 @@
         </div>
         <div class="sg-11 tight-bottom">
           <div class="headline">{{story['headline']}}</div>
-          <!--<div class="fb-permalink">32 mins</div>-->
         </div>
         <div class="clear"></div>
         <div class="sg-15 status-text">

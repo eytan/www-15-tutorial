@@ -56,7 +56,7 @@ clustered.bootstrap <- function(data, clusters, statistic, .R=250,
     # generate and multiply weight vectors
     w <- foreach(i = clusters, .combine = `*`) %do%
       {.RNG(num.clusters[[i]])[cluster.ids[[i]]]}
-    statistic(mutate(data, .weights=w), ...)
+    statistic(mutate(data, .weights=w, .r=r), ...)
   }
   replicates
 }
@@ -64,7 +64,7 @@ clustered.bootstrap <- function(data, clusters, statistic, .R=250,
 iid.bootstrap <- function(data, statistic, .R=250,
   .RNG = r.double.or.nothing, .combine=c, ...) {
    replicates <- foreach(r=1:.R, .combine=.combine) %do% {
-   	statistic(mutate(data, .weights=.RNG(nrow(data))), ...)
+   	statistic(mutate(data, .weights=.RNG(nrow(data)), .r=r), ...)
    }
    replicates
  }

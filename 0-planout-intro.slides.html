@@ -234,23 +234,33 @@ div.output_prompt {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="A-simple-A/B-test-(single-factor-experiment)">A simple A/B test (single factor experiment)<a class="anchor-link" href="#A-simple-A/B-test-(single-factor-experiment)">&#182;</a></h2>
+<h3 id="Outline">Outline<a class="anchor-link" href="#Outline">&#182;</a></h3><ul>
+<li>A simple A/B test</li>
+<li>How PlanOut works</li>
+<li>Recipes:<ul>
+<li>Factorial designs</li>
+<li>Cluster-randomized experiments</li>
+<li>Experiments with multiple units</li>
+</ul>
+</li>
+</ul>
+
 </div>
 </div>
-</div><div style=display:none>
+</div></section>
+    </section><section>
+    <section>
     
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>This imports basic operators for doing random assignment and SimpleExperiment, the base class for logging</p>
+<h3 id="Loading-up-PlanOut">Loading up PlanOut<a class="anchor-link" href="#Loading-up-PlanOut">&#182;</a></h3><p>This imports basic operators for doing random assignment and <code>SimpleExperiment</code>, the base class for logging</p>
 
 </div>
 </div>
 </div>
-    </div><div style=display:none>
-    
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
@@ -280,28 +290,44 @@ div.output_prompt {
 </div>
 </div>
 
-</div>
-    </div>
+</div></section>
+    </section><section>
+    <section>
+    
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Define new experiments by subclassing <code>SimpleExperiment</code>, and implementing an <code>assign()</code> method.</p>
+<h2 id="Anatomy-of-a-simple-A/B-test">Anatomy of a simple A/B test<a class="anchor-link" href="#Anatomy-of-a-simple-A/B-test">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>Define new experiments by subclassing <code>SimpleExperiment</code></li>
+<li>Implement logic in <code>assign()</code> method.</li>
+<li>Use <code>params</code> object to perform random assignments</li>
+</ul>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[72]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">VotingExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
   <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
     <span class="n">params</span><span class="o">.</span><span class="n">button_text</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span>
       <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;I&#39;m a voter&quot;</span><span class="p">,</span> <span class="s">&quot;I&#39;m voting&quot;</span><span class="p">],</span>
-      <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+      <span class="n">unit</span><span class="o">=</span><span class="n">userid</span>
+    <span class="p">)</span>
 </pre></div>
 
 </div>
@@ -317,14 +343,14 @@ div.output_prompt {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Get randomized assignments for input units by creating instances of the class.</p>
+<h3 id="Using-PlanOut">Using PlanOut<a class="anchor-link" href="#Using-PlanOut">&#182;</a></h3><p>Get randomized assignments for input units by creating instances of the class.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[73]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">e</span> <span class="o">=</span> <span class="n">VotingExperiment</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="mi">212</span><span class="p">)</span>
@@ -358,19 +384,19 @@ div.output_prompt {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Here are the assignments for 10 userids.</p>
+<h3 id="Using-PlanOut">Using PlanOut<a class="anchor-link" href="#Using-PlanOut">&#182;</a></h3><p>Here are the assignments for 10 userids.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[77]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
     <span class="n">e</span> <span class="o">=</span> <span class="n">VotingExperiment</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-    <span class="k">print</span> <span class="s">&quot;cookie = </span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;button_text&#39;</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s">&quot;user </span><span class="si">%s</span><span class="s"> sees: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;button_text&#39;</span><span class="p">))</span>
 </pre></div>
 
 </div>
@@ -383,16 +409,16 @@ div.output_prompt {
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>cookie = 0: I&apos;m voting
-cookie = 1: I&apos;m voting
-cookie = 2: I&apos;m voting
-cookie = 3: I&apos;m a voter
-cookie = 4: I&apos;m voting
-cookie = 5: I&apos;m a voter
-cookie = 6: I&apos;m voting
-cookie = 7: I&apos;m a voter
-cookie = 8: I&apos;m voting
-cookie = 9: I&apos;m voting
+<pre>user 0 sees: I&apos;m voting
+user 1 sees: I&apos;m voting
+user 2 sees: I&apos;m voting
+user 3 sees: I&apos;m a voter
+user 4 sees: I&apos;m voting
+user 5 sees: I&apos;m a voter
+user 6 sees: I&apos;m voting
+user 7 sees: I&apos;m a voter
+user 8 sees: I&apos;m voting
+user 9 sees: I&apos;m voting
 </pre>
 </div>
 </div>
@@ -445,7 +471,7 @@ cookie = 9: I&apos;m voting
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[79]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">VotingExperiment</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10000</span><span class="p">)]</span>
@@ -483,6 +509,555 @@ dtype: int64
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="How-random-assignment-works-in-PlanOut">How random assignment works in PlanOut<a class="anchor-link" href="#How-random-assignment-works-in-PlanOut">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>PlanOut uses deterministic hashing to perform random assignments</li>
+<li>Unless otherwise specified, all random assignments are independent.</li>
+<li>Ensures that:<ul>
+<li>The same units (e.g., user ids) get mapped to different values for different experiments or parameters.</li>
+<li>Assignments are as good as random.</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Underneath the hood, PlanOut computes a hash that looks like</p>
+
+<pre><code>f(SHA1(experiment_name.parameter_name.unit_id))
+
+</code></pre>
+<p>So for example, in the experiment below, PlanOut computes something that looks like:</p>
+
+<pre><code>SHA1(RandomExample1.x.4) % 2
+
+</code></pre>
+<p>to select the value for <code>x</code> when the given <code>userid</code> is 4.</p>
+
+</div>
+</div>
+</div></section>
+    </section><section>
+    <section>
+    
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Parameter-level-salts">Parameter-level salts<a class="anchor-link" href="#Parameter-level-salts">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+    
+<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">2000</span><span class="p">)]</span>
+<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>x  y
+0  a    531
+   b    475
+1  a    478
+   b    516
+dtype: int64
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Automatic-salting">Automatic salting<a class="anchor-link" href="#Automatic-salting">&#182;</a></h3>
+</div>
+</div>
+</div></section>
+    </section><section>
+    <section>
+    
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>By writing <code>params.foo = Bar(...)</code>, you are implicitly passing the salt, "foo", into <code>Bar()</code>. The following experiment is equivalent to the prior code.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
+    
+<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">2000</span><span class="p">)]</span>
+<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>x  y
+0  a    531
+   b    475
+1  a    478
+   b    516
+dtype: int64
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div><div style=display:none>
+    
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Comparing the cross tabs from the first and second experiments, it's clear that the two experiments produce identical assignments.</p>
+
+</div>
+</div>
+</div>
+    </div></section>
+    </section><section>
+    <section>
+    
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Changing-the-salts-change-the-assignments:">Changing the salts change the assignments:<a class="anchor-link" href="#Changing-the-salts-change-the-assignments:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s">&#39;x2&#39;</span><span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s">&#39;y2&#39;</span><span class="p">)</span>
+    
+<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">2000</span><span class="p">)]</span>
+<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>x  y
+0  a    507
+   b    493
+1  a    506
+   b    494
+dtype: int64
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div></section>
+    </section><section>
+    <section>
+    
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Correlated-assignments">Correlated assignments<a class="anchor-link" href="#Correlated-assignments">&#182;</a></h3>
+</div>
+</div>
+</div></section>
+    </section><section>
+    <section>
+    
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Parameters with the same salt will have correlated assignments. If you use the same salt for the exact same kind of random operation, your assignments will be perfectly correlated.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[62]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+    
+<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">2000</span><span class="p">)]</span>
+<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>x  y
+0  a    1006
+1  b     994
+dtype: int64
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div></section>
+    </section><section>
+    <section>
+    
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Experiment-level-salts">Experiment-level salts<a class="anchor-link" href="#Experiment-level-salts">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Each experiment also has its own salt. This makes it so that parameters with the same name will have independent random assignments, and also allows you to synchronize assignments across experiments in special situations.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="By-default,-experiment-class-names-are-used-as-experiment-level-salts">By default, experiment class names are used as experiment-level salts<a class="anchor-link" href="#By-default,-experiment-class-names-are-used-as-experiment-level-salts">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This keeps parameter assignments for parameters with the same name independent of one another.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+    
+<span class="k">class</span> <span class="nc">RandomExample2</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">,</span><span class="s">&#39;n&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+
+<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">4000</span><span class="p">)]</span>
+<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+
+<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample2</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">4000</span><span class="p">)]</span>
+<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>x  y
+0  a    1009
+   b     962
+1  a    1004
+   b    1025
+dtype: int64
+x  y
+4  m    1017
+   n     979
+8  m    1026
+   n     978
+dtype: int64
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Experiment-level-salts-can-be-specified-by-setting-self.salt">Experiment-level salts can be specified by setting <code>self.salt</code><a class="anchor-link" href="#Experiment-level-salts-can-be-specified-by-setting-self.salt">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The <code>self.salt</code> attribute of an experiment object specifies the experiment-level salt. You can set this attribute in the <code>setup()</code> method, which gets called before any assignments take place.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">salt</span> <span class="o">=</span> <span class="s">&#39;RandomExample2&#39;</span>
+
+  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+
+<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample2</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">4000</span><span class="p">)]</span>
+<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>x  y
+4  m    1017
+   n     979
+8  m    1026
+   n     978
+dtype: int64
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Additional-notes-on-random-assignment">Additional notes on random assignment<a class="anchor-link" href="#Additional-notes-on-random-assignment">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Random-assignment-with-multiple-units">Random assignment with multiple units<a class="anchor-link" href="#Random-assignment-with-multiple-units">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>When multiple units are used (e.g., in the case when user-item pairs are assigned to parameters in a within-subjects design), units are concatinated, so that if the input units are <code>userid=4</code> and <code>url='http://news.ycombinator.com'</code>, the hash operation would look like:</p>
+
+<pre><code>f(SHA1('RandomExperiment1.show_thumbnail.6.http://news.ycombinator.com'))</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">show_thumbnail</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">userid</span><span class="p">,</span> <span class="n">url</span><span class="p">])</span>
+
+<span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">&#39;http://news.ycombinator.com&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;show_thumbnail&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[44]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that since the names of units are not used, assignment does depend on the order of the units:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">show_thumbnail</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">url</span><span class="p">,</span> <span class="n">userid</span><span class="p">])</span>
+
+<span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">&#39;http://news.ycombinator.com&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;show_thumbnail&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[45]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>1</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div></section>
+    </section><section>
+    <section>
+    
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Factorial-designs">Factorial designs<a class="anchor-link" href="#Factorial-designs">&#182;</a></h2>
 </div>
 </div>
@@ -505,9 +1080,13 @@ dtype: int64
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">VotingExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
   <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
     <span class="n">params</span><span class="o">.</span><span class="n">button_text</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span>
-      <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;I&#39;m a voter&quot;</span><span class="p">,</span> <span class="s">&quot;I&#39;m voting&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+      <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;I&#39;m a voter&quot;</span><span class="p">,</span> <span class="s">&quot;I&#39;m voting&quot;</span><span class="p">],</span>
+      <span class="n">unit</span><span class="o">=</span><span class="n">userid</span>
+    <span class="p">)</span>
     <span class="n">params</span><span class="o">.</span><span class="n">has_social_cues</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span>
-      <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+      <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+      <span class="n">unit</span><span class="o">=</span><span class="n">userid</span>
+    <span class="p">)</span>
 </pre></div>
 
 </div>
@@ -624,22 +1203,27 @@ dtype: int64
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The <code>WeightedChoice</code> operator lets you select choices with different probabilities. The <code>weights</code> parameter is any set of weights (integer or floating point) to select among <code>choices</code>.</p>
+<p>The <code>WeightedChoice</code> operator lets you select choices with different probabilities.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[64]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">VotingExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
   <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
     <span class="n">params</span><span class="o">.</span><span class="n">button_text</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span>
-      <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;I&#39;m a voter&quot;</span><span class="p">,</span> <span class="s">&quot;I&#39;m voting&quot;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+      <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;I&#39;m a voter&quot;</span><span class="p">,</span> <span class="s">&quot;I&#39;m voting&quot;</span><span class="p">],</span>
+      <span class="n">unit</span><span class="o">=</span><span class="n">userid</span>
+    <span class="p">)</span>
     <span class="n">params</span><span class="o">.</span><span class="n">has_social_cues</span> <span class="o">=</span> <span class="n">WeightedChoice</span><span class="p">(</span>
-      <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+      <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+      <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+      <span class="n">unit</span><span class="o">=</span><span class="n">userid</span>
+    <span class="p">)</span>
 </pre></div>
 
 </div>
@@ -753,10 +1337,14 @@ $$ \left[
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">VotingExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
   <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
     <span class="n">params</span><span class="o">.</span><span class="n">has_megaphone</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span>
-      <span class="n">p</span><span class="o">=</span><span class="mf">0.97</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+      <span class="n">p</span><span class="o">=</span><span class="mf">0.97</span><span class="p">,</span>
+      <span class="n">unit</span><span class="o">=</span><span class="n">userid</span>
+    <span class="p">)</span>
     <span class="n">cond_probs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.98</span><span class="p">]</span>
     <span class="n">params</span><span class="o">.</span><span class="n">has_feed</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span>
-      <span class="n">p</span><span class="o">=</span><span class="n">cond_probs</span><span class="p">[</span><span class="n">params</span><span class="o">.</span><span class="n">has_megaphone</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+      <span class="n">p</span><span class="o">=</span><span class="n">cond_probs</span><span class="p">[</span><span class="n">params</span><span class="o">.</span><span class="n">has_megaphone</span><span class="p">],</span>
+      <span class="n">unit</span><span class="o">=</span><span class="n">userid</span>
+    <span class="p">)</span>
 </pre></div>
 
 </div>
@@ -825,13 +1413,16 @@ dtype: int64
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[65]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">VotingExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
   <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
     <span class="n">params</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="n">WeightedChoice</span><span class="p">(</span>
-      <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.015</span><span class="p">,</span> <span class="mf">0.015</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+      <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+      <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.015</span><span class="p">,</span> <span class="mf">0.015</span><span class="p">],</span>
+      <span class="n">unit</span><span class="o">=</span><span class="n">userid</span>
+    <span class="p">)</span>
     <span class="n">params</span><span class="o">.</span><span class="n">has_megaphone</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">][</span><span class="n">params</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
     <span class="n">params</span><span class="o">.</span><span class="n">has_feed</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">][</span><span class="n">params</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
 </pre></div>
@@ -846,7 +1437,7 @@ dtype: int64
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[66]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">VotingExperiment</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10000</span><span class="p">)]</span>
@@ -907,7 +1498,11 @@ dtype: int64
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">ColorExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
   <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">blue_value</span> <span class="o">=</span> <span class="n">RandomInteger</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">215</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">blue_value</span> <span class="o">=</span> <span class="n">RandomInteger</span><span class="p">(</span>
+        <span class="nb">min</span><span class="o">=</span><span class="mi">215</span><span class="p">,</span>
+        <span class="nb">max</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span>
+        <span class="n">unit</span><span class="o">=</span><span class="n">userid</span>
+    <span class="p">)</span>
     <span class="n">params</span><span class="o">.</span><span class="n">link_color</span> <span class="o">=</span> <span class="s">&#39;#0000</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">format</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">blue_value</span><span class="p">,</span> <span class="s">&#39;02x&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -1212,7 +1807,7 @@ TfYiIktAk72IyBLQZC8isgQ02YuILAFN9iIiS0CTvYjIEvj/pHi7EeB14t0AAAAASUVORK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[68]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">SelectiveExposureExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
@@ -1222,7 +1817,10 @@ TfYiIktAk72IyBLQZC8isgQ02YuILAFN9iIiS0CTvYjIEvj/pHi7EeB14t0AAAAASUVORK5CYII=
     
     <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">has_source_cues</span><span class="p">:</span>
       <span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Fox News&#39;</span><span class="p">,</span><span class="s">&#39;USA Today&#39;</span><span class="p">,</span> <span class="s">&#39;CNN&#39;</span><span class="p">,</span> <span class="s">&#39;MSNBC&#39;</span><span class="p">]</span>
-      <span class="n">params</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">subjectid</span><span class="p">,</span> <span class="n">url</span><span class="p">])</span>
+      <span class="n">params</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span>
+        <span class="n">choices</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span>
+        <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">subjectid</span><span class="p">,</span> <span class="n">url</span><span class="p">]</span>
+      <span class="p">)</span>
 </pre></div>
 
 </div>
@@ -1380,7 +1978,7 @@ TfYiIktAk72IyBLQZC8isgQ02YuILAFN9iIiS0CTvYjIEvj/pHi7EeB14t0AAAAASUVORK5CYII=
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Clustered-random-assignment">Clustered random assignment<a class="anchor-link" href="#Clustered-random-assignment">&#182;</a></h2>
+<h2 id="Clustered-randomized-assignment">Clustered randomized assignment<a class="anchor-link" href="#Clustered-randomized-assignment">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -1433,12 +2031,16 @@ TfYiIktAk72IyBLQZC8isgQ02YuILAFN9iIiS0CTvYjIEvj/pHi7EeB14t0AAAAASUVORK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[69]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">BadgeExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
   <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">studentid</span><span class="p">,</span> <span class="n">courseid</span><span class="p">,</span> <span class="n">week</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">rollout_week</span> <span class="o">=</span> <span class="n">RandomInteger</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">courseid</span><span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">rollout_week</span> <span class="o">=</span> <span class="n">RandomInteger</span><span class="p">(</span>
+      <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+      <span class="nb">max</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+      <span class="n">unit</span><span class="o">=</span><span class="n">courseid</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="n">week</span> <span class="o">&gt;=</span> <span class="n">params</span><span class="o">.</span><span class="n">rollout_week</span><span class="p">:</span>
       <span class="n">params</span><span class="o">.</span><span class="n">has_faces</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">else</span><span class="p">:</span>
@@ -1455,7 +2057,7 @@ TfYiIktAk72IyBLQZC8isgQ02YuILAFN9iIiS0CTvYjIEvj/pHi7EeB14t0AAAAASUVORK5CYII=
     
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[70]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">example_course</span> <span class="o">=</span> <span class="mi">17</span>
@@ -1464,8 +2066,8 @@ TfYiIktAk72IyBLQZC8isgQ02YuILAFN9iIiS0CTvYjIEvj/pHi7EeB14t0AAAAASUVORK5CYII=
 <span class="k">print</span> <span class="s">&#39;The badge rollout for course </span><span class="si">%s</span><span class="s"> is </span><span class="si">%s</span><span class="s">...&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">example_course</span><span class="p">,</span> <span class="n">rollout_week</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">week</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
-  <span class="n">has_faces</span> <span class="o">=</span> <span class="n">BadgeExperiment</span><span class="p">(</span><span class="n">studentid</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">courseid</span><span class="o">=</span><span class="n">example_course</span><span class="p">,</span> <span class="n">week</span><span class="o">=</span><span class="n">week</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;has_faces&#39;</span><span class="p">)</span>
-  <span class="k">print</span> <span class="s">&#39;week </span><span class="si">%s</span><span class="s">: has_faces = </span><span class="si">%s</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">week</span><span class="p">,</span> <span class="n">has_faces</span><span class="p">)</span>
+  <span class="n">exp</span> <span class="o">=</span> <span class="n">BadgeExperiment</span><span class="p">(</span><span class="n">studentid</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">courseid</span><span class="o">=</span><span class="n">example_course</span><span class="p">,</span> <span class="n">week</span><span class="o">=</span><span class="n">week</span><span class="p">)</span>
+  <span class="k">print</span> <span class="s">&#39;week </span><span class="si">%s</span><span class="s">: has_faces = </span><span class="si">%s</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">week</span><span class="p">,</span> <span class="n">exp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;has_faces&#39;</span><span class="p">))</span>
 </pre></div>
 
 </div>
@@ -1520,19 +2122,40 @@ week 8: has_faces = 1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">CueExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
   <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">,</span> <span class="n">page</span><span class="p">,</span> <span class="n">friends</span><span class="p">):</span>
     <span class="n">params</span><span class="o">.</span><span class="n">num_friends_shown</span> <span class="o">=</span> <span class="n">RandomInteger</span><span class="p">(</span>
-      <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">friends</span><span class="p">)),</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">userid</span><span class="p">,</span> <span class="n">page</span><span class="p">])</span>
+      <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+      <span class="nb">max</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">friends</span><span class="p">)),</span>
+      <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">userid</span><span class="p">,</span> <span class="n">page</span><span class="p">]</span>
+    <span class="p">)</span>
     <span class="n">params</span><span class="o">.</span><span class="n">friends_shown</span> <span class="o">=</span> <span class="n">Sample</span><span class="p">(</span>
-      <span class="n">choices</span><span class="o">=</span><span class="n">friends</span><span class="p">,</span> <span class="n">draws</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">num_friends_shown</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">userid</span><span class="p">,</span> <span class="n">page</span><span class="p">])</span>
+      <span class="n">choices</span><span class="o">=</span><span class="n">friends</span><span class="p">,</span>
+      <span class="n">draws</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">num_friends_shown</span><span class="p">,</span>
+      <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">userid</span><span class="p">,</span> <span class="n">page</span><span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
 
-<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
-    <span class="n">some_friends</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;Sean&quot;</span><span class="p">,</span> <span class="s">&quot;Cat&quot;</span><span class="p">,</span> <span class="s">&quot;Solomon&quot;</span><span class="p">,</span> <span class="s">&quot;Dean&quot;</span><span class="p">,</span> <span class="s">&quot;Anne&quot;</span><span class="p">,</span> <span class="s">&quot;Moira&quot;</span><span class="p">,</span> <span class="s">&quot;Michael&quot;</span><span class="p">,</span> <span class="s">&quot;Mike&quot;</span><span class="p">]</span>
-    <span class="k">print</span> <span class="n">CueExperiment</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">friends</span><span class="o">=</span><span class="n">some_friends</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;friends_shown&#39;</span><span class="p">)</span>
+</div>
+</div>
+</div>
+
+</div></section>
+    </section><section>
+    <section>
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="n">some_friends</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;Sean&quot;</span><span class="p">,</span> <span class="s">&quot;Cat&quot;</span><span class="p">,</span> <span class="s">&quot;Solomon&quot;</span><span class="p">,</span> <span class="s">&quot;Dean&quot;</span><span class="p">,</span> <span class="s">&quot;Anne&quot;</span><span class="p">,</span> <span class="s">&quot;Moira&quot;</span><span class="p">,</span> <span class="s">&quot;Ronald&quot;</span><span class="p">,</span> <span class="s">&quot;Mike&quot;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
+    <span class="k">print</span> <span class="n">CueExperiment</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="n">pid</span><span class="p">,</span> <span class="n">friends</span><span class="o">=</span><span class="n">some_friends</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;friends_shown&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -1545,18 +2168,18 @@ week 8: has_faces = 1
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[]
+<pre>[&apos;Dean&apos;, &apos;Solomon&apos;]
 []
-[&apos;Michael&apos;, &apos;Dean&apos;]
-[&apos;Dean&apos;]
+[&apos;Ronald&apos;, &apos;Anne&apos;, &apos;Moira&apos;]
+[&apos;Solomon&apos;, &apos;Ronald&apos;, &apos;Mike&apos;]
+[&apos;Mike&apos;]
+[&apos;Sean&apos;, &apos;Cat&apos;]
+[&apos;Mike&apos;]
 []
-[&apos;Moira&apos;, &apos;Michael&apos;]
-[&apos;Mike&apos;, &apos;Moira&apos;]
-[&apos;Mike&apos;, &apos;Anne&apos;]
-[&apos;Anne&apos;, &apos;Dean&apos;]
-[&apos;Mike&apos;, &apos;Anne&apos;]
-[&apos;Michael&apos;]
-[&apos;Michael&apos;, &apos;Dean&apos;]
+[&apos;Mike&apos;, &apos;Ronald&apos;, &apos;Solomon&apos;]
+[&apos;Solomon&apos;, &apos;Cat&apos;, &apos;Ronald&apos;]
+[&apos;Sean&apos;, &apos;Dean&apos;, &apos;Mike&apos;]
+[&apos;Moira&apos;, &apos;Mike&apos;, &apos;Solomon&apos;]
 </pre>
 </div>
 </div>
@@ -1582,23 +2205,56 @@ week 8: has_faces = 1
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Sometimes we are interested in how manipulations may in aggregate affect a subjects' outcomes. For example, <strong>to what extent does feedback on a user's content future content production?</strong> To answer this question, we can modulate the amount of feedback focal subjects receive by varying encouragements to peers providing feedback.</p>
+<ul>
+<li>How does feedback affect content production?</li>
+<li>Use experiments to modulate feedback a focal subject receives by varying encouragements for peers to provide feedback.</li>
+</ul>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[53]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">ContentExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
   <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">producerid</span><span class="p">,</span> <span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">RandomFloat</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">producerid</span><span class="p">)</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="p">])</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">RandomFloat</span><span class="p">(</span>
+        <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">unit</span><span class="o">=</span><span class="n">producerid</span>
+    <span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span>
+        <span class="n">p</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">p</span><span class="p">,</span>
+        <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
 
+</div>
+</div>
+</div>
 
-<span class="k">def</span> <span class="nf">sim_impressions</span><span class="p">(</span><span class="n">producerid</span><span class="p">,</span> <span class="n">storyid</span><span class="p">):</span>
+</div><div style=display:none>
+    
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Each user has some overall probability that viewers of their story will see an expanded version of their post. Expanded versions receive more feedback. Subjects are assigned some proportion of impressions of their stories to be expanded. The <code>expand</code> parameter is assigned using both the post and the viewer, so that different posts and different viewers may see the story epxnaded some times but not others.</p>
+
+</div>
+</div>
+</div>
+    </div><div style=display:none>
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="k">def</span> <span class="nf">sim_impressions</span><span class="p">(</span><span class="n">producerid</span><span class="p">,</span> <span class="n">storyid</span><span class="p">):</span>
     <span class="n">viewers</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
     <span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">ContentExperiment</span><span class="p">(</span><span class="n">producerid</span><span class="o">=</span><span class="n">producerid</span><span class="p">,</span> <span class="n">storyid</span><span class="o">=</span><span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="o">=</span><span class="n">viewerid</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">viewerid</span> <span class="ow">in</span> <span class="n">viewers</span><span class="p">]</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
@@ -1613,16 +2269,7 @@ week 8: has_faces = 1
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Each user has some overall probability that viewers of their story will see an expanded version of their post. Expanded versions receive more feedback. Subjects are assigned some proportion of impressions of their stories to be expanded. The <code>expand</code> parameter is assigned using both the post and the viewer, so that different posts and different viewers may see the story epxnaded some times but not others.</p>
-
-</div>
-</div>
-</div></section>
+    </div></section>
     </section><section>
     <section>
     
@@ -2023,8 +2670,15 @@ week 8: has_faces = 1
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">ContentExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
   <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">producerid</span><span class="p">,</span> <span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">RandomFloat</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="n">storyid</span><span class="p">)</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">expand</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="p">])</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">RandomFloat</span><span class="p">(</span>
+        <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">unit</span><span class="o">=</span><span class="n">storyid</span>
+    <span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">expand</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span>
+        <span class="n">p</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">p</span><span class="p">,</span>
+        <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="p">]</span>
+    <span class="p">)</span>
 </pre></div>
 
 </div>
@@ -2061,8 +2715,15 @@ week 8: has_faces = 1
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">ContentExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
   <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">producerid</span><span class="p">,</span> <span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">RandomFloat</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">viewerid</span><span class="p">,</span> <span class="n">producerid</span><span class="p">])</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">expand</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="p">])</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">RandomFloat</span><span class="p">(</span>
+        <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">viewerid</span><span class="p">,</span> <span class="n">producerid</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">expand</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span>
+        <span class="n">p</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">p</span><span class="p">,</span>
+        <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="p">]</span>
+    <span class="p">)</span>
 </pre></div>
 
 </div>
@@ -2073,32 +2734,38 @@ week 8: has_faces = 1
     </section><section>
     <section>
     
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="c">### Exercise: how can you encourage dyads in only one direction?</span>
-</pre></div>
-
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exercise:-how-can-you-encourage-dyads-in-only-one-direction?">Exercise: how can you encourage dyads in only one direction?<a class="anchor-link" href="#Exercise:-how-can-you-encourage-dyads-in-only-one-direction?">&#182;</a></h3>
 </div>
 </div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="prompt input_prompt">In&nbsp;[60]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">ContentExperiment</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
   <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">producerid</span><span class="p">,</span> <span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">RandomFloat</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">viewerid</span><span class="p">,</span> <span class="n">producerid</span><span class="p">])</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">can_encourage</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">viewerid</span><span class="p">,</span> <span class="n">producerid</span><span class="p">])</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">RandomFloat</span><span class="p">(</span>
+        <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">viewerid</span><span class="p">,</span> <span class="n">producerid</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">can_encourage</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span>
+        <span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">viewerid</span><span class="p">,</span> <span class="n">producerid</span><span class="p">]</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">can_encourage</span><span class="p">:</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">expand</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="p">])</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">expand</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">p</span><span class="p">,</span>
+            <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">storyid</span><span class="p">,</span> <span class="n">viewerid</span><span class="p">]</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">expand</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">expand</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 
 </div>
@@ -2108,89 +2775,11 @@ week 8: has_faces = 1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[61]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">ContentExperiment</span><span class="p">(</span><span class="n">producerid</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">storyid</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">viewerid</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[37]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{&apos;can_encourage&apos;: 0, &apos;expand&apos;: False, &apos;p&apos;: 0.64982842794723}</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="How-random-assignment-works-in-PlanOut">How random assignment works in PlanOut<a class="anchor-link" href="#How-random-assignment-works-in-PlanOut">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>PlanOut hashes input data to provide developers with randomized parameter assignments. Unless otherwise specified, all random assignments are independent. It combines experiment-level and parameter-level salts with the given input units in a way that ensures that:</p>
-<ul>
-<li>The same units (e.g., user ids) get mapped to different values for different experiments or parameters.</li>
-<li>Assignments are as good as random.</li>
-</ul>
-<p>Underneath the hood, PlanOut computes a hash that looks like</p>
-
-<pre><code>f(SHA1(experiment_name.parameter_name.unit_id))
-
-</code></pre>
-<p>So for example, in the experiment below, PlanOut computes something that looks like:</p>
-
-<pre><code>SHA1(RandomExample1.x.4) % 2
-
-</code></pre>
-<p>to select the value for <code>x</code> when the given <code>userid</code> is 4.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Parameter-level-salts">Parameter-level salts<a class="anchor-link" href="#Parameter-level-salts">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
-    
-<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">2000</span><span class="p">)]</span>
-<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<div class=" highlight hl-ipython2"><pre><span class="k">print</span><span class="p">(</span><span class="n">ContentExperiment</span><span class="p">(</span><span class="n">producerid</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">storyid</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">viewerid</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ContentExperiment</span><span class="p">(</span><span class="n">producerid</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">storyid</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">viewerid</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">())</span>
 </pre></div>
 
 </div>
@@ -2203,12 +2792,8 @@ week 8: has_faces = 1
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>x  y
-0  a    531
-   b    475
-1  a    478
-   b    516
-dtype: int64
+<pre>{&apos;p&apos;: 0.29109390488133224, &apos;expand&apos;: 0, &apos;can_encourage&apos;: 1}
+{&apos;p&apos;: 0.64982842794723, &apos;expand&apos;: 0, &apos;can_encourage&apos;: 0}
 </pre>
 </div>
 </div>
@@ -2216,437 +2801,6 @@ dtype: int64
 </div>
 </div>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>PlanOut automatically "salts" each random assignment operator with the name of the parameter you are assigning. By writing <code>params.foo = Bar(...)</code>, you are implicitly passing the salt, "foo", into <code>Bar()</code>. The following experiment is equivalent to the code above.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
-    
-<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">2000</span><span class="p">)]</span>
-<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>x  y
-0  a    531
-   b    475
-1  a    478
-   b    516
-dtype: int64
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Comparing the cross tabs from the first and second experiments, it's clear that the two experiments produce identical assignments.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Changing-the-salts-change-the-assignments:">Changing the salts change the assignments:<a class="anchor-link" href="#Changing-the-salts-change-the-assignments:">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s">&#39;x2&#39;</span><span class="p">)</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s">&#39;y2&#39;</span><span class="p">)</span>
-    
-<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">2000</span><span class="p">)]</span>
-<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>x  y
-0  a    507
-   b    493
-1  a    506
-   b    494
-dtype: int64
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Parameters-with-the-same-salt-will-have-correlated-assignments.-If-you-use-the-same-salt-for-the-exact-same-kind-of-random-operation,-your-assignments-will-be-perfectly-correlated.">Parameters with the same salt will have correlated assignments. If you use the same salt for the exact same kind of random operation, your assignments will be perfectly correlated.<a class="anchor-link" href="#Parameters-with-the-same-salt-will-have-correlated-assignments.-If-you-use-the-same-salt-for-the-exact-same-kind-of-random-operation,-your-assignments-will-be-perfectly-correlated.">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">,</span> <span class="n">salt</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
-    
-<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">2000</span><span class="p">)]</span>
-<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>x  y
-0  a    1006
-1  b     994
-dtype: int64
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Experiment-level-salts">Experiment-level salts<a class="anchor-link" href="#Experiment-level-salts">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Each experiment also has its own salt. This makes it so that parameters with the same name will have independent random assignments, and also allows you to synchronize assignments across experiments in special situations.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="By-default,-experiment-class-names-are-used-as-experiment-level-salts">By default, experiment class names are used as experiment-level salts<a class="anchor-link" href="#By-default,-experiment-class-names-are-used-as-experiment-level-salts">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>This keeps parameter assignments for parameters with the same name independent of one another.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
-    
-<span class="k">class</span> <span class="nc">RandomExample2</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">,</span><span class="s">&#39;n&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
-
-<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">4000</span><span class="p">)]</span>
-<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-
-<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample2</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">4000</span><span class="p">)]</span>
-<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>x  y
-0  a    1009
-   b     962
-1  a    1004
-   b    1025
-dtype: int64
-x  y
-4  m    1017
-   n     979
-8  m    1026
-   n     978
-dtype: int64
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Experiment-level-salts-can-be-specified-by-setting-self.salt">Experiment-level salts can be specified by setting <code>self.salt</code><a class="anchor-link" href="#Experiment-level-salts-can-be-specified-by-setting-self.salt">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The <code>self.salt</code> attribute of an experiment object specifies the experiment-level salt. You can set this attribute in the <code>setup()</code> method, which gets called before any assignments take place.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[43]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">salt</span> <span class="o">=</span> <span class="s">&#39;RandomExample2&#39;</span>
-
-  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">UniformChoice</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="n">userid</span><span class="p">)</span>
-
-<span class="n">sim_users</span> <span class="o">=</span> <span class="p">[</span><span class="n">RandomExample2</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">4000</span><span class="p">)]</span>
-<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">sim_users</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">assignments</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>x  y
-4  m    1017
-   n     979
-8  m    1026
-   n     978
-dtype: int64
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Additional-notes-on-random-assignment">Additional notes on random assignment<a class="anchor-link" href="#Additional-notes-on-random-assignment">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Random-assignment-with-multiple-units">Random assignment with multiple units<a class="anchor-link" href="#Random-assignment-with-multiple-units">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>When multiple units are used (e.g., in the case when user-item pairs are assigned to parameters in a within-subjects design), units are concatinated, so that if the input units are <code>userid=4</code> and <code>url='http://news.ycombinator.com'</code>, the hash operation would look like:</p>
-
-<pre><code>f(SHA1('RandomExperiment1.show_thumbnail.6.http://news.ycombinator.com'))</code></pre>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[44]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">show_thumbnail</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">userid</span><span class="p">,</span> <span class="n">url</span><span class="p">])</span>
-
-<span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">&#39;http://news.ycombinator.com&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;show_thumbnail&#39;</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[44]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>0</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Note that since the names of units are not used, assignment does depend on the order of the units:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="k">class</span> <span class="nc">RandomExample1</span><span class="p">(</span><span class="n">SimpleExperiment</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">userid</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
-    <span class="n">params</span><span class="o">.</span><span class="n">show_thumbnail</span> <span class="o">=</span> <span class="n">BernoulliTrial</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="p">[</span><span class="n">url</span><span class="p">,</span> <span class="n">userid</span><span class="p">])</span>
-
-<span class="n">RandomExample1</span><span class="p">(</span><span class="n">userid</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">&#39;http://news.ycombinator.com&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;show_thumbnail&#39;</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[45]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>1</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Namespaces">Namespaces<a class="anchor-link" href="#Namespaces">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>When an experiment is running under a namespace, the namespace name is concatenated with the experiment-level salt. See the PlanOut documentation for more information on namespaces.</p>
-
-</div>
-</div>
 </div></section>
     </section>
 </div>

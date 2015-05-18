@@ -39,6 +39,7 @@ clustered.bootstrap <- function(data, clusters, statistic, .R=250,
                     .RNG = r.double.or.nothing,
                     .progress = "none",
                     .parallel = FALSE,
+                    .combine=c,
                     ...) {
   if(length(clusters) == 0) {
   	return(iid.bootstrap(data, statistic, .R, .RNG, ...))
@@ -52,7 +53,7 @@ clustered.bootstrap <- function(data, clusters, statistic, .R=250,
     num.clusters[[i]] <- length(levels(groups.factor))
   }
 
-  replicates <- foreach(r=1:.R, .combine=c) %do% {
+  replicates <- foreach(r=1:.R, .combine=.combine) %do% {
     # generate and multiply weight vectors
     w <- foreach(i = clusters, .combine = `*`) %do%
       {.RNG(num.clusters[[i]])[cluster.ids[[i]]]}
@@ -68,7 +69,6 @@ iid.bootstrap <- function(data, statistic, .R=250,
    }
    replicates
  }
-
 
 norm.intervals <- function(x, alpha=0.05) {
   data.frame(

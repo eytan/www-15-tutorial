@@ -160,6 +160,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     stories = {int(k): v for k, v in json.load(args.stories).iteritems()}
+    for story_key, story in stories.iteritems():
+        assert 'headline' in story and 'text' in story, 'Story:{} is no good'.format(story_key)
 
     app = Application([
         (r'/', SummariseContent, {'stories': stories, 

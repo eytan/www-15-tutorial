@@ -37,7 +37,6 @@ r.double.or.nothing <- function(n) {
 clustered.bootstrap <- function(data, clusters, statistic, .R=250,
                     .verbose = FALSE,
                     .RNG = r.double.or.nothing,
-                    .progress = "none",
                     .parallel = FALSE,
                     .combine=c,
                     ...) {
@@ -63,8 +62,8 @@ clustered.bootstrap <- function(data, clusters, statistic, .R=250,
 }
 
 iid.bootstrap <- function(data, statistic, .R=250,
-  .RNG = r.double.or.nothing) {
-   replicates <- foreach(r=1:.R, .combine=c) %do% {
+  .RNG = r.double.or.nothing, .combine=c, ...) {
+   replicates <- foreach(r=1:.R, .combine=.combine) %do% {
    	statistic(mutate(data, .weights=.RNG(nrow(data))), ...)
    }
    replicates

@@ -16,7 +16,7 @@ data/survey_log.csv: webapp/logs/survey.log
 	python webapp/extract_data.py --event=response --infile=$< --outfile=$@	
 
 %.slides.html: %.ipynb
-	ipython nbconvert --to=slides $*.ipynb
+	ipython nbconvert --to=slides $*.ipynb --config=slides_config.py
 
 slides: 4-analyzing-experiments.slides.html
 

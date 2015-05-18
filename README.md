@@ -50,5 +50,11 @@ Navigate to your checked out version of PlanOut and type:
 ipython notebook --pylab inline
 ```
 
+You can also start a web server to serve up the slides by entering, e.g.,:
+
+```
+ipython nbconvert 0-planout-intro.ipynb --to slides --post serve
+```
+
 ### More information
 See the (syllabus)[https://eytan.github.io/www-15-tutorial/] for more information about the tutorial.

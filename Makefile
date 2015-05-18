@@ -1,18 +1,20 @@
 serve:
 	python webapp/app.py
 
-data: data/exposure_log.csv data/summary_log.csv data/survey_log.csv
+data_old: data/exposure_old_log.csv data/summary_old_log.csv data/survey_old_log.csv
+
+data_mturk2: data/exposure_mturk2_log.csv data/summary_mturk2_log.csv data/survey_mturk2_log.csv
 
 clean_data:
 	rm data/*.csv
 
-data/exposure_log.csv: webapp/logs/experiment.log
+data/exposure_%_log.csv: webapp/logs/experiment_%.log
 	python webapp/extract_data.py --event=exposure --infile=$< --outfile=$@
 
-data/summary_log.csv: webapp/logs/experiment.log
+data/summary_%_log.csv: webapp/logs/experiment_%.log
 	python webapp/extract_data.py --event=summary --infile=$< --outfile=$@
 
-data/survey_log.csv: webapp/logs/survey.log
+data/survey_%_log.csv: webapp/logs/survey_%.log
 	python webapp/extract_data.py --event=response --infile=$< --outfile=$@	
 
 %.slides.html: %.ipynb

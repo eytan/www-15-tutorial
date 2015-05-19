@@ -1,7 +1,9 @@
 WWW 2015 Tutorial
 =================
 
-Welcome to the github repository for the WWW 2015 tutorial on online experiments for computational social science! You'll find files from
+Welcome to the github repository for the WWW 2015 tutorial on online experiments for computational social science!
+
+[You can view all slides and materials on the web.](https://eytan.github.io/www-15-tutorial)
 
 
 ### Repository contents
@@ -20,9 +22,6 @@ Welcome to the github repository for the WWW 2015 tutorial on online experiments
 
 - `css_stats.R`: Functions for working with weighted data and multi-way bootstrapping
 
-- `gift_data.csv`: Data used for power analysis exercise.
-
-
 ### Description of tutorial
 This tutorial teaches attendees how to design, plan, implement, and analyze online experiments. First, we review basic concepts in causal inference and motivate the need for experiments. Then we will discuss basic statistical tools to help plan experiments: exploratory analysis, power calculations, and the use of simulation in R. We then discuss statistical methods to estimate causal quantities of interest and construct appropriate confidence intervals. Particular attention will be given to scalable methods suitable for “big data”, including working with weighted data and clustered bootstrapping. We then discuss how to design and implement online experiments using PlanOut, an open-source toolkit for advanced online experimentation used at Facebook. We will show how basic “A/B tests”, within-subjects designs, as well as more sophisticated experiments can be implemented. We demonstrate how experimental designs from social computing literature can be implemented, and also review in detail two very large field experiments conducted at Facebook using PlanOut. Finally, we will discuss issues with logging and common errors in the deployment and analysis of experiments. Attendees will be given code examples and participate in the planning, implementation, and analysis of a Web application using Python, PlanOut, and R.
 
@@ -40,20 +39,24 @@ Basic knowledge of statistics and probability theory, and some familiarity with 
 
 - Learn how to integrate experimentation into Web applications, and analyze the results using R.
 
-### Software Instructions
+### Required Software
 
-1. Download and install (Anaconda)[https://store.continuum.io/cshop/anaconda/], a distribution of Python that includes most packages you will need:
+1. Download and install [Anaconda](https://store.continuum.io/cshop/anaconda/), a distribution of Python that includes most packages you will need:
   
-2. Install (R)[http://cran.r-project.org/] (R 3.1 or later)
+2. Install [R](http://cran.r-project.org/) (R 3.1 or later)
 
 3. Install required R packages by typing into R:
 
-  >> install.packages(c('dplyr', 'ggplot2', 'sandwich', 'foreach', 'doMC', 'sandwich', ‘lmtest’, ‘broom’, ))
+```
+>> install.packages(c('dplyr', 'ggplot2', 'sandwich', 'foreach', 'doMC', 'sandwich', ‘lmtest’, ‘broom’, ))
+```
 
 4. Install PlanOut and Rpy2. In your terminal, type:
 
-  $ pip install planout
-  $ pip install rpy2 (or pip install rpy2 —upgrade if you have rpy2 already.  You must have R installed before this)
+```
+$ pip install planout
+$ pip install rpy2 (or pip install rpy2 —upgrade if you have rpy2 already.  You must have R installed before this)
+```
 
 ## Loading up the tutorial notebooks
 
@@ -70,4 +73,4 @@ ipython nbconvert 0-estimation-and-power.ipynb --to slides --post serve
 ```
 
 ### More information
-See the (syllabus)[https://eytan.github.io/www-15-tutorial/] for more information about the tutorial.
+See the [syllabus](https://eytan.github.io/www-15-tutorial/) for more information about the tutorial.

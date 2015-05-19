@@ -1,6 +1,8 @@
 serve:
 	python webapp/app.py
 
+data_www15: data/exposure_www15_log.csv data/summary_www15_log.csv data/survey_www15_log.csv
+
 data_old: data/exposure_old_log.csv data/summary_old_log.csv data/survey_old_log.csv
 
 data_mturk2: data/exposure_mturk2_log.csv data/summary_mturk2_log.csv data/survey_mturk2_log.csv

@@ -1,33 +1,31 @@
 library(lmtest)
 library(Hmisc)
 library(foreach)
+library(sandwich)
 
 # code by dean eckles and eytan bakshy
 
-freq.weighted.vcov <- function (object, vcov. = vcov, freq = NA, ...) 
-{
-    if (missing(freq)) {
-        freq <- object$weights
-    }
-    if (class(vcov) == "function") {
-        vcov. <- vcov.(object, ...)
-    }
-    vcov. * length(freq)/sum(freq)
+sandwich.lm <- function(fit) {
+ bread.value <- bread(fit)
+
+ # get the meat
+ psi <- as.matrix(estfun(fit))
+ weights <- fit$weights
+ m <- NROW(psi)
+ # psi is already multiplied times the weights
+ rval <- t(psi) %*% (psi / weights) / m^2
+ rownames(rval) <- colnames(rval) <- colnames(psi)
+ meat.value <- rval
+
+ bread.value %*% meat.value %*% bread.value
 }
-coeftest.freq <- function (object, vcov. = vcov, freq = NA, df = NA, ...) 
-{
-    if (!require(lmtest)) {
-        stop("This requires the 'lmtest' package.")
-    }
-    if (missing(freq)) {
-        freq <- object$weights
-    }
-    if (is.na(df)) {
-        df <- sum(freq) - (length(freq) - df.residual(object))
-    }
-    coeftest(object, freq.weighted.vcov(object, vcov., freq, 
-        ...), df)
+
+# weighted linear regression coeftest with sandwich standard errors
+weighted.lm.coeftest <- function(formula, data, ...) {
+  m <- lm(formula, data=data, weights=.weights, ...)
+  coeftest(m, vcov=sandwich.lm)
 }
+
 
 ## the bootstrap
 r.double.or.nothing <- function(n) {

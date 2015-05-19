@@ -1,0 +1,15 @@
+.reveal .slides {
+  height: 100% !important;
+  top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.reveal .slides>section {
+  min-height: 90% !important;
+  top: auto !important;
+}
+
+.reveal .slides>section>section {
+  min-height: 100% !important;
+  top: auto !important;
+}

@@ -28,3 +28,5 @@ slides/%.slides.html: %.ipynb
 
 slides: slides/0-estimation-and-power.slides.html slides/1-planout-intro.slides.html slides/2-making-your-own-data.slides.html slides/4-analyzing-experiments.slides.html
 
+serve_slides:
+	open http://127.0.0.1:9000 && python -m SimpleHTTPServer 9000

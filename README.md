@@ -5,23 +5,20 @@ Welcome to the github repository for the WWW 2015 tutorial on online experiments
 
 
 ### Repository contents
-- `webapp/`: Demo experiment, conducted on all tutorial participants. Includes data analyzed in `analyzing_experiments.R`.
 
-- `0-planout-intro.ipynb`: IPython notebook containing an introduction to PlanOut and examples of experimental designs in PlanOut
+- `0-estimation-and-power.ipynb`: IPython notebook discussing inference for experiments and showing how to do a power analysis via simulation.
 
-- `1-logging.ipynb`: How logging works in PlanOut, with a worked example
+- `1-planout-intro.ipynb`: IPython notebook containing an introduction to PlanOut and examples of experimental designs in PlanOut.
 
-- `4-analyzing-experiments.ipynb`: How to analyze the experimental data we produced.
+- `2-making-your-own-data.ipynb`: How to extract a data frame from logs generated through PlanOut.
 
-- `bootstrap.R`: Sample power analysis for the demo experiment
+- `4-analyzing-experiments.ipynb`: How to analyze the experimental data we produced, including scaling analysis to big data.
+
+- `webapp/`: Demo experiment which will work with MTurk.
+
+- `data/`: Data extracted from logfiles used in selective exposure experiment.
 
 - `css_stats.R`: Functions for working with weighted data and multi-way bootstrapping
-
-- `power_part1.R`: Intro to power analysis: confidence intervals for normal and binary data, using simulations to understand Type I, Type II, and Type M errors, and do power analysis.
-
-- `power_part2.R`: Critical thinking and power analysis exercise.
-
-- `power_part2_gen_data.R`: Script that generates fake data used in `power_part2.R`
 
 - `gift_data.csv`: Data used for power analysis exercise.
 
@@ -43,7 +40,23 @@ Basic knowledge of statistics and probability theory, and some familiarity with 
 
 - Learn how to integrate experimentation into Web applications, and analyze the results using R.
 
+### Software Instructions
+
+1. Download and install (Anaconda)[https://store.continuum.io/cshop/anaconda/], a distribution of Python that includes most packages you will need:
+  
+2. Install (R)[http://cran.r-project.org/] (R 3.1 or later)
+
+3. Install required R packages by typing into R:
+
+  >> install.packages(c('dplyr', 'ggplot2', 'sandwich', 'foreach', 'doMC', 'sandwich', ‘lmtest’, ‘broom’, ))
+
+4. Install PlanOut and Rpy2. In your terminal, type:
+
+  $ pip install planout
+  $ pip install rpy2 (or pip install rpy2 —upgrade if you have rpy2 already.  You must have R installed before this)
+
 ## Loading up the tutorial notebooks
+
 Navigate to your checked out version of PlanOut and type:
 
 ```
@@ -53,7 +66,7 @@ ipython notebook --pylab inline
 You can also start a web server to serve up the slides by entering, e.g.,:
 
 ```
-ipython nbconvert 0-planout-intro.ipynb --to slides --post serve
+ipython nbconvert 0-estimation-and-power.ipynb --to slides --post serve
 ```
 
 ### More information

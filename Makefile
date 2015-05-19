@@ -20,8 +20,11 @@ data/summary_%_log.csv: webapp/logs/experiment_%.log
 data/survey_%_log.csv: webapp/logs/survey_%.log
 	python webapp/extract_data.py --event=response --infile=$< --outfile=$@	
 
-slides/%.slides.html: %.ipynb
-	ipython nbconvert $*.ipynb --to=slides --config=slides/slides_config.py --stdout > $@
+clean_slides:
+	rm slides/*.slides.html
 
-slides: slides/4-analyzing-experiments.slides.html
+slides/%.slides.html: %.ipynb
+	ipython nbconvert $*.ipynb --to=slides --config=slides/slides_config.py --stdout --reveal-prefix "http://cdn.jsdelivr.net/reveal.js/2.6.2" > $@
+
+slides: slides/0-estimation-and-power.slides.html slides/1-planout-intro.slides.html slides/2-making-your-own-data.slides.html slides/4-analyzing-experiments.slides.html
 

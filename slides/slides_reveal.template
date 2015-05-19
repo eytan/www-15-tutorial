@@ -10,6 +10,7 @@
 Reveal.initialize({
     controls: false,
     margin: 0.0,
+
     // Display controls in the bottom right corner
     //controls: true,
 

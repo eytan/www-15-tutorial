@@ -8,6 +8,9 @@ data_mturk2: data/exposure_mturk2_log.csv data/summary_mturk2_log.csv data/surve
 clean_data:
 	rm data/*.csv
 
+clean:
+	rm *.log
+
 data/exposure_%_log.csv: webapp/logs/experiment_%.log
 	python webapp/extract_data.py --event=exposure --infile=$< --outfile=$@
 

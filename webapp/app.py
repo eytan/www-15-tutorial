@@ -177,4 +177,5 @@ if __name__ == '__main__':
     )
     http_server = HTTPServer(app)
     http_server.listen(args.port, address=args.host)
+    print('Serving on http://{0.host}:{0.port}'.format(args))
     IOLoop.instance().start()

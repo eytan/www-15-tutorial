@@ -26,7 +26,7 @@ clean_slides:
 	rm slides/*.slides.html
 
 slides/%.slides.html: %.ipynb
-	ipython nbconvert $*.ipynb --to=slides --config=slides/slides_config.py --stdout --reveal-prefix "http://cdn.jsdelivr.net/reveal.js/2.6.2" > $@
+	ipython nbconvert $*.ipynb --to=slides --config=slides/slides_config.py --execute --stdout --reveal-prefix "http://cdn.jsdelivr.net/reveal.js/2.6.2" > $@
 
 slides: slides/0-estimation-and-power.slides.html slides/1-planout-intro.slides.html slides/2-making-your-own-data.slides.html slides/4-analyzing-experiments.slides.html
 

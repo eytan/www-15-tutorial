@@ -51,11 +51,10 @@ Basic knowledge of statistics and probability theory, and some familiarity with 
 >> install.packages(c('dplyr', 'ggplot2', 'sandwich', 'foreach', 'doMC', 'sandwich', ‘lmtest’, ‘broom’, ))
 ```
 
-4. Install PlanOut and Rpy2. In your terminal, type:
+4. Install iPython, PlanOut, and Rpy2. In your terminal, type:
 
 ```
-$ pip install planout
-$ pip install rpy2 (or pip install rpy2 —upgrade if you have rpy2 already.  You must have R installed before this)
+$ pip install -U ipython planout rpy2
 ```
 
 ## Loading up the tutorial notebooks

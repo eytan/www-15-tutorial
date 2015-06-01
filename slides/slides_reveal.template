@@ -8,7 +8,7 @@
 <script>
 
 Reveal.initialize({
-    controls: false,
+    controls: true,
     margin: 0.0,
 
     // Display controls in the bottom right corner

@@ -48,7 +48,7 @@ Basic knowledge of statistics and probability theory, and some familiarity with 
 3. Install required R packages by typing into R:
 
 ```
->> install.packages(c('dplyr', 'ggplot2', 'sandwich', 'foreach', 'doMC', 'sandwich', ‘lmtest’, ‘broom’, ))
+>> install.packages(c('dplyr', 'ggplot2', 'sandwich', 'foreach', 'doMC', 'sandwich', 'lmtest', 'broom', 'Hmisc' ))
 ```
 
 4. Install iPython, PlanOut, and Rpy2. In your terminal, type:
